@@ -1,15 +1,65 @@
 <!DOCTYPE html>
 <html>
 
+<!-- Datos del head -->
+
 <head>
-  <meta charset="utf-8">
-  <title>INDEX</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link rel="stylesheet" href="./style.css">
+    <meta charset="utf-8">
+    <title>Menú Principal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
-  Hola amigos! Gracias por instalar el proyecto :)
+
+    <!-- Barra de navegación -->
+    <nav style="position:fixed; top: 0">
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo center">Chicharrones</a>
+        </div>
+    </nav>
+
+    <h4 class="center">Seleccione un botón</h4><br>
+
+    <div class="container">
+
+        <!-- Primera fila de botones -->
+        <div class="center">
+
+            <a href="agregar_producto.html" style="width: 250px; margin: 25px"
+                class="waves-effect waves-light btn-large">
+                <i class="material-icons right">add_circle_outline</i>Agregar producto</a>
+
+            <a style="width: 250px; margin: 25px" class="waves-effect waves-light btn-large">
+                <i class="material-icons right">repeat</i>Realizar venta</a>
+        </div>
+        <br>
+
+        <!-- Segunda fila de botones -->
+        <div class="center">
+
+            <a style="width: 250px; margin: 25px" class="waves-effect waves-light btn-large">
+                <i class="material-icons right">insert_chart</i>Estadísticas
+            </a>
+
+            <a style="width: 250px; margin: 25px" class="waves-effect waves-light btn-large">
+                <i class="material-icons right">settings</i>Configuración
+            </a>
+        </div>
+        <br>
+
+        <!-- Botón para salir de la aplicación -->
+        <div class="center">
+
+            <a onclick="exitApplication()" style="margin: 15px" class="waves-effect waves-light btn red lighten-1">
+                <i class="material-icons right">exit_to_app</i>Salir
+            </a>
+        </div>
+    </div>
+
+    <!-- Se importan las funciones en index -->
+    <script src="index.js"></script>
 </body>
 
 </html>
