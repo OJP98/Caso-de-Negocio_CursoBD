@@ -1,0 +1,14 @@
+::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    margin-top: 100px;
+}
+
+th,
+td {
+    border: 1px solid #DBDBDB;
+
+    padding-left: 20px;
+}
