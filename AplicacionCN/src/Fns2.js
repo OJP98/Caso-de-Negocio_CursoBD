@@ -1,6 +1,7 @@
 function iniciar() 
 {
     console.log(localStorage['CustomData']);
+    document.getElementById("nombreDeLaTienda").innerHTML=localStorage['NombreTienda']|| 'Nombre de la tienda';
 }
 
 
@@ -9,7 +10,9 @@ function ingresarNombreTienda()
 {
     console.log("Nombre de tienda");
     var nombre=document.getElementById("nombreTienda").value;
-    console.log(nombre);
+    localStorage['NombreTienda']=nombre;
+
+    document.getElementById("nombreDeLaTienda").innerHTML=localStorage['NombreTienda']|| 'Nombre de la tienda';
 
 }
 
@@ -61,8 +64,6 @@ function createJSON()
         
     }
     
-    localStorage['CustomData']=JSON.stringify(item);;
+    localStorage['CustomData']=JSON.stringify(item);
     
-    console.log(localStorage['CustomData']);
-
 }
