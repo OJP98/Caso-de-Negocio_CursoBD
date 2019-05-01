@@ -8,6 +8,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="./style.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
 </head>
 
 <body onload="iniciar()">
@@ -42,6 +46,7 @@
     
     <div class="row">
 
+      <form id="FormAgregarAtributo">
     <div class="input-field">
         <div class="col s6">
         <input placeholder="Ingrese el nombre del atributo a ingresar" id="NomAtrib" type="text" class="validate">
@@ -54,7 +59,7 @@
       <div class="col s2">
       <p>
         <label>
-          <input name="group1" type="radio" id="RadioNum" />
+          <input name="group1" type="radio" id="RadioNum" checked  />
           <span>Número</span>
         </label>
       </p>
@@ -68,14 +73,30 @@
         </label>
       </p>
     </div>
-
+  </form>
     </div>
-    <a onclick="actualizarTablaCont()" style="margin: 15px" class="waves-effect waves-light btn red lighten-1">Ingresar</a>
+    <a onclick="addRow()" style="margin: 15px" class="waves-effect waves-light btn red lighten-1">Ingresar</a>
     
     <br>
     <br>
 
-    <table id="tabla">
+    <table id="tabla" class="highlight" cellpadding="2">
+      <thead>
+        <tr>
+            <th width="40%"><b>Propiedad</b></th>
+            <th width="40%"><b>Valor</b></th>
+            <th width="20%"><b>¿Eliminar?</b></th>
+        </tr>
+      </thead>
+
+      <tbody id="tablaCont">
+                   
+          
+
+        </tbody>
+    </table>
+
+    <!-- <table id="tabla">
         <thead>
           <tr>
               <th>Atributo</th>
@@ -88,10 +109,13 @@
           
 
         </tbody>
-      </table>
-    </div>
+      </table> -->
+
+  </div>
     <!-- Se importan las funciones en index -->
     <script src="Fns2.js"></script>
-</body>
 
+    
+
+ </body>
 </html><!DOCTYPE html>

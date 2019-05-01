@@ -20,6 +20,7 @@ function makeJson() {
 };
 
 
+
 // FUNCIONES RELACIONADAS A LA TABLA DINÁMICA DE 'AGREGAR PRODUCTO'
 function addRow() {
 
