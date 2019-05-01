@@ -58,21 +58,3 @@ function load() {
 };
 //FUNCIONES RELACIONADAS A LA TABLA DINÁMICA DE 'CONFIGURAR'
 
-function actualizarTablaCont()
-{
-    var contenido=document.getElementById("tablaCont");
-    var trVar=document.createElement("tr");
-    var tdVar=document.createElement("td");
-    var tdVar2=document.createElement("td");
-    
-
-    trVar.appendChild(tdVar);
-    tdVar.innerHTML="Puto";
-    trVar.appendChild(tdVar2);
-    tdVar2.innerHTML="Puto2";
-
-    contenido.appendChild(trVar)
-
-
-    console.log(contenido);
-}
