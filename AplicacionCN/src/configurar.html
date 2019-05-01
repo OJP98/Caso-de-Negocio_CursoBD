@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Datos del head -->
+
+<head>
+  <meta charset="utf-8">
+  <title>Menú Principal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+  <!-- Barra de navegación -->
+  <nav style="position:fixed; top: 0">
+      <div class="nav-wrapper">
+          <a href="index.html" class="brand-logo center">Chicharrones</a>
+      </div>
+  </nav>
+
+
+<body>
+    <div class="container" >
+    <h4 class="center">Configuración de Tienda</h4>
+
+    
+    <div class="row">
+
+    <div class="input-field">
+        <div class="col s6">
+        <input placeholder="Ingrese el nombre del atributo a ingresar" id="first_name" type="text" class="validate">
+        <label for="first_name">Nombre del atributo</label>
+        </div>
+    </div>
+
+      <br>
+
+      <div class="col s2">
+      <p>
+        <label>
+          <input name="group1" type="radio" />
+          <span>Número</span>
+        </label>
+      </p>
+      </div>
+
+      <div class="col s2">
+      <p>
+        <label>
+          <input name="group1" type="radio" />
+          <span>Texto</span>
+        </label>
+      </p>
+    </div>
+
+    </div>
+    <a onclick="actualizarTablaCont()" style="margin: 15px" class="waves-effect waves-light btn red lighten-1">Ingresar</a>
+    
+    <br>
+    <br>
+
+    <table>
+        <thead>
+          <tr>
+              <th>Atributo</th>
+              <th>Tipo de dato</th>              
+          </tr>
+        </thead>
+
+        <tbody id="tablaCont">
+          <tr>
+            <td>Alvin</td>
+            <td>Eclair</td>            
+          </tr>
+
+          
+          
+
+        </tbody>
+      </table>
+    </div>
+    <!-- Se importan las funciones en index -->
+    <script src="Fns.js"></script>
+</body>
+
+</html><!DOCTYPE html>
