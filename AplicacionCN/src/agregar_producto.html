@@ -18,18 +18,17 @@
 
 </head>
 
+<!-- Barra de navegación -->
+<nav class="fixed-nav-bar">
+    <div class="nav-wrapper">
+        <a href="index.html" class="brand-logo center">Chicharrones</a>
+        <ul class="left hide-on-med-and-down">
+            <li><a href="index.html"><i class="material-icons">keyboard_backspace</i></a></li>
+        </ul>
+    </div>
+</nav>
+
 <body>
-
-    <!-- Barra de navegación -->
-    <nav style="position:fixed; top: 0">
-        <div class="nav-wrapper">
-            <a href="index.html" class="brand-logo center">Chicharrones</a>
-            <ul class="left hide-on-med-and-down">
-                <li><a href="index.html"><i class="material-icons">keyboard_backspace</i></a></li>
-            </ul>
-        </div>
-    </nav>
-
 
     <h4 class="center">Agregar un producto</h4>
 
@@ -56,10 +55,6 @@
                         quetzales</span>
                 </div>
 
-                <!-- Boton para hacer RESET -->
-                <!-- <div class="input-field col s6">
-                    <input type="reset" class="waves-effect waves-light btn"></input>
-                </div> -->
             </form>
         </div>
 
@@ -72,49 +67,26 @@
             <div class="row">
                 <form id="propiedadesForm" class="col s12">
 
-                    <div class="input-field col s5">
+                    <!-- <div class="input-field col s4">
                         <input id="propiedad" type="text" class="validate" value="" required>
-                        <label for="propiedad">Propiedad</label>
+                        <label for="propiedad">Peso</label>
                         <span class="helper-text" data-error="El nombre tiene que existir"></span>
                     </div>
 
-                    <!-- Input del valor de dicha propiedad -->
-                    <div class="input-field col s5">
+                    <div class="input-field col s4">
                         <input id="valor" type="text" class="validate" value="" required>
                         <label for="valor">Valor</label>
                         <span class="helper-text" data-error="El nombre tiene que existir"></span>
                     </div>
 
-                    <!-- Botón para añadir la propiedad -->
-                    <div class="input-field col s2">
-                        <a id="agregarBtn" onclick="addRow()" style="margin: 15px"
-                            class="waves-effect waves-light btn">Añadir</a>
+                    <div class="input-field col s4">
+                        <input id="valor" type="text" class="validate" value="" required>
+                        <label for="valor">Talla</label>
+                        <span class="helper-text" data-error="El nombre tiene que existir"></span>
                     </div>
+ -->
 
                 </form>
-
-            </div>
-
-            <p id="texto" class="center" style="margin-bottom: 25px">No hay propiedades ingresadas</p>
-
-            <!-- Tabla de datos ingresados -->
-            <div id="datos" style="display: none">
-
-                <div>
-                    <b>Propiedades ingresadas</b>
-                    <br>
-                    <br>
-                    <table id="tablaPropiedades" class="highlight" cellpadding="2">
-                        <tr>
-                            <td width="40%"><b>Propiedad</b></td>
-                            <td width="40%"><b>Valor</b></td>
-                            <td width="20%"><b>¿Eliminar?</b></td>
-                        </tr>
-                    </table>
-                    &nbsp;
-                </div>
-
-                <br>
 
             </div>
 
@@ -137,20 +109,18 @@
     </script>
 
     <script>
-        $(document).ready(function () {
+        getAttributes();
 
-            $('#agregarBtn').click(function () {
-                $('#datos').slideDown();
-                document.getElementById('texto').style.display = "none";
-            });
+        $(document).ready(function() {
 
-            $('#cancelarBtn2').click(function () {
+            $('#cancelarBtn2').click(function() {
                 window.history.back();
             });
 
-            $('#guardarBtn').click(function () {
-                makeJson();
+            $('#guardarBtn').click(function() {
+                console.log("")
             });
+
         });
     </script>
 
