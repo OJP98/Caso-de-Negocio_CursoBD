@@ -48,8 +48,6 @@ function deleteRow(obj) {
 
 function addInputs(atributo, tipo_dato) {
 
-	console.log(tipo_dato)
-
 	var type = "";
 
 	if (tipo_dato == 'REAL' || tipo_dato == 'NUMERIC'){
@@ -82,6 +80,7 @@ function addInputs(atributo, tipo_dato) {
 	input.required = true;
 	input.type = type;
 	input.className = "validate";
+	input.id = atributo + "Input";
 
 	// Se añaden todos los atributos al div
 	div.append(input);
@@ -120,4 +119,45 @@ async function getAttributes() {
 		console.error("Error",e);
 	}
 	
+}
+
+async function saveProduct() {
+
+	// Declaracion de variables generales
+	var formPropiedades = document.getElementById("propiedadesForm");
+	var formGenerales = document.getElementById("generalesForm");
+	var error = false;
+
+	// Por cada atributo ingresado hasta el momento...
+	for (var i = 0; i < atributos.length; i+=2) {
+
+		// Se obtiene el nombre y el valor del atributo
+		var nombre = atributos[i];
+		var valor = document.getElementById(nombre+"Input").value;
+
+		// Se hace el string con el query
+		var query = `INSERT INTO custom (atributo, valor, idproducto) VALUES ('${nombre}', '${valor}', 10)`
+		
+		// Se ejecuta el query
+		try
+		{	
+			await Pool.query(query);			
+		}
+		catch(e)
+		{
+			console.error("Error",e);
+			error = true;
+		}
+	}
+
+	// Impresión de mensajes en caso de éxito o error.
+	if (error)
+		alert("Se ha producido un error... Vuelva a intentarlo");
+	else
+		alert("¡Producto agregado con éxito!")
+
+	// Reset de formularios
+	formPropiedades.reset();
+	formGenerales.reset();
+
 }
