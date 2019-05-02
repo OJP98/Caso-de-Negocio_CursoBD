@@ -19,14 +19,14 @@
         <div class="column">
             <p>Fecha inicial</p>
             <div class="input-container">
-                <input type="date">
+                <input id="fechaInicial" type="date">
             </div>
         </div>
 
         <div class="column">
             <p>Fecha final</p>
             <div class="input-container">
-                <input type="date">
+                <input id="fechaFinal" type="date">
             </div>
         </div>
     </div>
@@ -34,13 +34,15 @@
     <div>
         <h3 class="titulo3">Cantidad de ventas</h3>
         <div class="numberInput">
-            <input type="number" min="1" placeholder="Cantidad de ventas">
+            <input id="cantidad" type="number" min="1" placeholder="Cantidad de ventas">
         </div>
     </div>
 
+    <br>
     <div style="text-align:center;">
-        <button class="button"><span>Crear ventas</span></button>
+        <button class="button" onclick="crearFacturas()"><span>Crear ventas</span></button>
     </div>  
+    <script src="ventas.js"></script>
 </body>
 
 </html>
