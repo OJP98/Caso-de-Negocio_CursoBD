@@ -6,6 +6,9 @@
 
 body {
     background-color: #ebf0f6;
+    margin-top: 50px;
+    margin-left: 40px;
+    margin-right: 20px;
 }
 
 .titulo1 {
@@ -35,16 +38,21 @@ body {
 }
 
 .numberInput {
-    width: 20%;
-    margin: auto;
+    width: 25%;
+    padding-left: 40px;
 }
 
+th,
+td {
+    border: 1px solid #DBDBDB;
+    padding-left: 20px;
+}
 
 
 .button {
     vertical-align: middle;
     border-radius: 4px;
-    background-color: #364e68;
+    background-color: #26A69A;
     border: none;
     color: #FFFFFF;
     text-align: center;
