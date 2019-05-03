@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS clientes CASCADE;
+
 CREATE TABLE clientes
 (
 	 id 			SERIAL PRIMARY KEY,
@@ -36,8 +37,25 @@ DROP TABLE IF EXISTS custom CASCADE;
 CREATE TABLE custom
 (
 	idProducto 		int PRIMARY KEY,
-	data 			JSON,
-	FOREIGN KEY (idProducto) REFERENCES productos (id)
+	valor			VARCHAR,
+	atributo		VARCHAR,
+	idCategoria 		int,
+
+	FOREIGN KEY (idProducto) REFERENCES productos (id),
+	FOREIGN KEY (idCategoria) REFERENCES categorias (id)
+
+);
+
+DROP TABLE IF EXISTS datos CASCADE;
+CREATE TABLE datos
+(
+	atributo 		int PRIMARY KEY,
+	tipo_dato		VARCHAR,
+	idCategoria 	int,
+
+	FOREIGN KEY (atributo) REFERENCES custom (atributo),
+	FOREIGN KEY (idCategoria) REFERENCES categorias (id)
+
 );
 
 DROP TABLE IF EXISTS facturas CASCADE;
@@ -61,15 +79,6 @@ CREATE TABLE lineas_de_facturas
 	FOREIGN KEY (idProducto) REFERENCES productos (id)
 );
 
-
-insert into custom values 
-(1,
-	'{
-  "Talla": 5,
-  "var2": "Hola2",
-  "var3": "Hola3"
-	}'
-);
 
 DROP FUNCTION IF EXISTS updateSUMTotal;
 CREATE OR REPLACE FUNCTION updateSUMTotal() 
