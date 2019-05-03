@@ -7,7 +7,7 @@ var config=
 {
 	user:'postgres',
 	database:'proyecto',
-	password:'postgres',
+	password:'Juarez1998',
 	host:'127.0.0.1',
 	port:5432,
 	max:10,

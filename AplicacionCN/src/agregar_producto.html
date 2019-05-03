@@ -38,7 +38,18 @@
 
         <!-- Espacio para ingresar nombre y precio -->
         <div class="row">
-            <form id="generalesForm" class="col s12">
+
+            <h5>Datos generales del producto</h5>
+
+            <form id="generalesForm">
+                <div class="input-field col s6 offset-s3">
+                    <input list="categorias" placeholder="Seleccione una categoría" required>
+                    <datalist id="categorias">
+                          <option value="Zapatos">
+                          <option value="Camisas">
+                          <option value="Pantalones">
+                        </datalist>
+                </div>
 
                 <!-- Input del nombre del producto -->
                 <div class="input-field col s6">
@@ -58,8 +69,14 @@
             </form>
         </div>
 
+        <!-- Botones para guardar y cancelar las propiedades del producto -->
+        <div class="center">
+            <a id="continuarBtn" style="margin: 15px" class="waves-effect waves-light btn">
+                <i class="material-icons right">navigate_next</i>Continuar</a>
+        </div>
+
         <!-- Propiedades de cada producto -->
-        <div id="propiedades">
+        <div id="propiedades" style="display:none">
             <h5>Propiedades del producto</h5>
             <br>
 
@@ -109,12 +126,15 @@
     </script>
 
     <script>
-        getAttributes();
-
         $(document).ready(function() {
 
             $('#cancelarBtn2').click(function() {
                 window.history.back();
+            });
+
+            $('#continuarBtn').click(function() {
+                getAttributes();
+                $('#propiedades').slideDown();
             });
 
             $('#guardarBtn').click(function() {
