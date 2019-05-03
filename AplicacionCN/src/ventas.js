@@ -15,8 +15,9 @@ var Pool = new Pool(config);
 function getRandom(min, max){
     min = Math.ceil(min);
     max = Math.floor(max);
-
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    var random = Math.random();
+    console.log("Random: " + random);
+    return Math.floor(random * (Math.abs(max - min) + 1)) + min;
 }
 
 async function crearFacturas() {
@@ -64,7 +65,7 @@ async function crearFacturas() {
                 var tipoTienda = tiendas[getRandom(0, tiendas.length - 1)];
                 // console.log(tipoTienda);
                 var query = "INSERT INTO facturas(clienteId, fecha, total, tienda) VALUES(" + idCliente + ", '" + ano + "-" + mes + "-" + dia + "', NULL, '" + tipoTienda +"');";
-                // console.log(query);
+                console.log("Factura: " + query);
                 var response = await Pool.query(query);
             }
 
@@ -77,19 +78,24 @@ async function crearFacturas() {
                 maximoFactura = 1;
                 minimoFactura = 1;
             }
-
+            
             var idFactura = getRandom(minimoFactura, maximoFactura);
+            console.log(minimoFactura + " " + maximoFactura + " " + idFactura);
             // console.log(parseInt(minimoProducto) + " " + parseInt(maximoProducto));
             var idProducto = getRandom(parseInt(minimoProducto), parseInt(maximoProducto));
             var cantidad = getRandom(1, 10);
 
-            var query = "INSERT INTO lineas_de_facturas(facturaId, idproducto, cantidad) VALUES(" + idFactura + ", " + idProducto + ", " + cantidad + ");";
+            var query = "SELECT checkId(" + idFactura + ", " + idProducto + ", " + cantidad + ");";
+            console.log("Linea de factura: " + query);
             var response = await Pool.query(query);
         }
     } catch(e){
         console.error("My error", e);
     }
     console.log("LIsto");
+
+    var query = 'DELETE FROM facturas WHERE total IS NULL;';
+    var response = await Pool.query(query);
 }
 
 // var connectionString = 'postgres://localhost/proyecto2DB';

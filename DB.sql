@@ -71,8 +71,53 @@ insert into custom values
 	}'
 );
 
-select data->>'Talla' from custom
+DROP FUNCTION IF EXISTS updateSUMTotal;
+CREATE OR REPLACE FUNCTION updateSUMTotal() 
+RETURNS TRIGGER AS
+$BODY$
+BEGIN 
+	UPDATE facturas 
+	SET total = (SELECT SUM(p.precio * lf.cantidad)
+				FROM lineas_de_facturas as lf
+				JOIN productos p ON lf.idproducto = p.id
+				WHERE facturas.id = lf.facturaid);
+	RETURN NEW;
+END;
+$BODY$
+LANGUAGE PLPGSQL;
 
+DROP FUNCTION IF EXISTS checkId;
+CREATE OR REPLACE FUNCTION checkId(
+	factura INT, 
+	producto INT, 
+	cantidad INT) 
+RETURNS VOID AS
+$BODY$
+DECLARE
+	idNuevo INT = factura;
+	validacion BOOL = false;
+BEGIN 
+	WHILE validacion != true LOOP
+		PERFORM *
+		FROM facturas
+		WHERE id = idNuevo;
+		IF NOT FOUND THEN
+			idNuevo = idNuevo + 1;
+		ELSE
+			validacion = true;
+		END IF;
+	END LOOP;
+		
+	INSERT INTO lineas_de_facturas(facturaid, idproducto, cantidad) VALUES(idNuevo, producto, cantidad);
+END;
+$BODY$
+LANGUAGE PLPGSQL;
+
+DROP TRIGGER IF EXISTS updateTotal ON lineas_de_facturas;
+CREATE TRIGGER updateTotal AFTER INSERT ON lineas_de_facturas FOR EACH ROW EXECUTE PROCEDURE updateSUMTotal(); 
+
+
+--select data->>'Talla' from custom
 
 INSERT INTO clientes(nombre, nit) VALUES('Javier Carpio', '577019-K');
 INSERT INTO clientes(nombre, nit) VALUES('Jose Cifuentes', '123456-K');
@@ -91,8 +136,8 @@ INSERT INTO productos(nombre, precio, idCategorias, idMarcas) VALUES('Laptop', 1
 INSERT INTO productos(nombre, precio, idCategorias, idMarcas) VALUES('Adizero', 850, 2, 1);
 
 INSERT INTO facturas(clienteId, fecha, total, tienda) VALUES(1, '2015-05-05', NULL, 'Tienda A');
+SELECT checkId(1, 1, 5);
 
-INSERT INTO lineas_de_facturas(facturaid, idproducto, cantidad) VALUES(1, 1, 5);
 
 SELECT * FROM clientes;
 SELECT * FROM categorias;
@@ -100,30 +145,3 @@ SELECT * FROM marcas;
 SELECT * FROM productos;
 SELECT * FROM facturas;
 SELECT * FROM lineas_de_facturas;
-
-DELETE FROM lineas_de_facturas WHERE facturaid = 1;
-
-DROP FUNCTION IF EXISTS updateSUMTotal;
-CREATE OR REPLACE FUNCTION updateSUMTotal() 
-RETURNS TRIGGER AS
-$BODY$
-BEGIN 
-	UPDATE facturas 
-	SET total = (SELECT SUM(p.precio * lf.cantidad)
-				FROM lineas_de_facturas as lf
-				JOIN productos p ON lf.idproducto = p.id
-				WHERE facturas.id = lf.facturaid);
-	RETURN NEW;
-END;
-$BODY$
-LANGUAGE PLPGSQL;
-
-
-
-DROP TRIGGER IF EXISTS updateTotal ON lineas_de_facturas;
-CREATE TRIGGER updateTotal AFTER INSERT ON lineas_de_facturas FOR EACH ROW EXECUTE PROCEDURE updateSUMTotal(); 
-
-SELECT MAX(id) FROM clientes;
-
-
-
