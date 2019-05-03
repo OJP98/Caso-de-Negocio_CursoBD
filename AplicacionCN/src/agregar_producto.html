@@ -112,7 +112,7 @@
 
     <script>
         getCategorias();
-        getMarcas();
+        getMarcas();        
         document.getElementById("nombreDeLaTienda").innerHTML = localStorage['NombreTienda'] || 'Nombre de la tienda';
 
         $(document).ready(function () {
@@ -127,7 +127,9 @@
             });
 
             $('#guardarBtn').click(function () {
-                saveProduct();
+                getLastId().then(function(id){
+                    saveProduct(id);
+                });
             });
 
         });
