@@ -21,7 +21,7 @@
 <!-- Barra de navegación -->
 <nav class="fixed-nav-bar">
     <div class="nav-wrapper">
-        <a href="index.html" class="brand-logo center">Chicharrones</a>
+        <a id="nombreDeLaTienda" href="index.html" class="brand-logo center"></a>
         <ul class="left hide-on-med-and-down">
             <li><a href="index.html"><i class="material-icons">keyboard_backspace</i></a></li>
         </ul>
@@ -42,13 +42,18 @@
             <h5>Datos generales del producto</h5>
 
             <form id="generalesForm">
-                <div class="input-field col s6 offset-s3">
-                    <input list="categorias" placeholder="Seleccione una categoría" required>
+                <!-- Datalist para ingresar una categoría -->
+                <div class="input-field col s6">
+                    <input id="categoriasInput" list="categorias" placeholder="Seleccione una categoría" required>
                     <datalist id="categorias">
-                          <option value="Zapatos">
-                          <option value="Camisas">
-                          <option value="Pantalones">
-                        </datalist>
+                    </datalist>
+                </div>
+
+                <!-- Datalist para ingresar una categoría -->
+                <div class="input-field col s6">
+                    <input id="marcasInput" list="marcas" placeholder="Seleccione una marca" required>
+                    <datalist id="marcas">
+                    </datalist>
                 </div>
 
                 <!-- Input del nombre del producto -->
@@ -83,26 +88,6 @@
             <!-- Input del nombre de la propiedad -->
             <div class="row">
                 <form id="propiedadesForm" class="col s12">
-
-                    <!-- <div class="input-field col s4">
-                        <input id="propiedad" type="text" class="validate" value="" required>
-                        <label for="propiedad">Peso</label>
-                        <span class="helper-text" data-error="El nombre tiene que existir"></span>
-                    </div>
-
-                    <div class="input-field col s4">
-                        <input id="valor" type="text" class="validate" value="" required>
-                        <label for="valor">Valor</label>
-                        <span class="helper-text" data-error="El nombre tiene que existir"></span>
-                    </div>
-
-                    <div class="input-field col s4">
-                        <input id="valor" type="text" class="validate" value="" required>
-                        <label for="valor">Talla</label>
-                        <span class="helper-text" data-error="El nombre tiene que existir"></span>
-                    </div>
- -->
-
                 </form>
 
             </div>
@@ -126,18 +111,22 @@
     </script>
 
     <script>
-        $(document).ready(function() {
+        getCategorias();
+        getMarcas();
+        document.getElementById("nombreDeLaTienda").innerHTML = localStorage['NombreTienda'] || 'Nombre de la tienda';
 
-            $('#cancelarBtn2').click(function() {
+        $(document).ready(function () {
+
+            $('#cancelarBtn2').click(function () {
                 window.history.back();
             });
 
-            $('#continuarBtn').click(function() {
+            $('#continuarBtn').click(function () {
                 getAttributes();
                 $('#propiedades').slideDown();
             });
 
-            $('#guardarBtn').click(function() {
+            $('#guardarBtn').click(function () {
                 saveProduct();
             });
 

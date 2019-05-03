@@ -1,16 +1,17 @@
 var $ = require('jQuery');
 var Pool = require('pg').Pool;
+var idCategoria = 1,
+	idMarca = 1;
 
 var atributos = []
 
-var config=
-{
-	user:'postgres',
-	database:'proyecto',
-	password:'Juarez1998',
-	host:'127.0.0.1',
-	port:5432,
-	max:10,
+var config = {
+	user: 'postgres',
+	database: 'proyecto2',
+	password: 'postgres',
+	host: '127.0.0.1',
+	port: 5432,
+	max: 10,
 };
 
 var Pool = new Pool(config);
@@ -50,11 +51,10 @@ function addInputs(atributo, tipo_dato) {
 
 	var type = "";
 
-	if (tipo_dato == 'REAL' || tipo_dato == 'NUMERIC'){
+	// Validación de tipo de dato
+	if (tipo_dato == 'REAL' || tipo_dato == 'NUMERIC') {
 		type = 'number'
-	}
-
-	else if (tipo_dato == 'VARCHAR' || tipo_dato == 'CHARACTER VARYING'){
+	} else if (tipo_dato == 'VARCHAR' || tipo_dato == 'CHARACTER VARYING') {
 		type = 'text'
 	}
 
@@ -88,64 +88,97 @@ function addInputs(atributo, tipo_dato) {
 	div.append(span);
 
 	// Se añade el div al form
-	form.append(div);	
+	form.append(div);
 
 }
 
 async function getAttributes() {
 
-	try
-	{
-		// Se consulta la tabla de datos
-		var response = await Pool.query('SELECT * FROM datos');
+	// Se obtiene la categoría y marca seleccionada por el usuario
+	var datalistCategorias = document.getElementById('categorias');
+	var categoriasInput = document.getElementById('categoriasInput');
+
+	var datalistMarcas = document.getElementById('marcas');
+	var marcasInput = document.getElementById('marcasInput');
+
+
+	// Se obtiene el index de la marca seleccionada
+	for (var i = 0; i < datalistCategorias.options.length; i++) {
+		if (datalistCategorias.options[i].value == categoriasInput.value) {
+			idCategoria += i;
+			break;
+		}
+	}
+
+	// Se obtiene el index de la categoría seleccionada
+	for (var i = 0; i < datalistMarcas.options.length; i++) {
+		if (datalistMarcas.options[i].value == marcasInput.value) {
+			idMarca += i;
+			break;
+		}
+	}
+
+	try {
+		// Se seleccionan los atributos en base al id de la categoría
+		var response = await Pool.query(`SELECT atributo, tipo_dato FROM datos WHERE idCategoria = ${idCategoria}`);
 
 		// Por cada dato en la respuesta
-		for (var i = 0; i < response.rows.length; i++){
+		for (var i = 0; i < response.rows.length; i++) {
 
 			// Se obtiene el atributo, su valor y se agrega a una lista
 			var dict = response.rows[i]
-			for(var key in dict) 
+			for (var key in dict)
 				atributos.push(dict[key])
 		}
 
 		// Se recorre la lista anteriormente mencionada y se hace el respectivo input
-		for (var j = 0; j < atributos.length; j+=2){
-			addInputs(atributos[j], atributos[j+1])
+		for (var j = 0; j < atributos.length; j += 2) {
+			addInputs(atributos[j], atributos[j + 1])
 		}
 
+	} catch (e) {
+		console.error("Error", e);
 	}
-	catch(e)
-	{
-		console.error("Error",e);
-	}
-	
+
 }
 
 async function saveProduct() {
 
+
 	// Declaracion de variables generales
 	var formPropiedades = document.getElementById("propiedadesForm");
 	var formGenerales = document.getElementById("generalesForm");
+
+	var nombreProducto = document.getElementById("nombre_prod").value;
+	var precioProducto = document.getElementById("precio_prod").value;
+
 	var error = false;
 
+	// Declaración del segundo query
+	var query2 = `INSERT INTO productos (id, nombre, precio, idCategoria, idMarca) VALUES (10,'${nombreProducto}','${precioProducto}', ${idCategoria}, ${idMarca});`;
+
+	try {
+		await Pool.query(query2);
+	} catch (e) {
+		console.error("Error", e);
+	}
+
 	// Por cada atributo ingresado hasta el momento...
-	for (var i = 0; i < atributos.length; i+=2) {
+	for (var i = 0; i < atributos.length; i += 2) {
 
 		// Se obtiene el nombre y el valor del atributo
 		var nombre = atributos[i];
-		var valor = document.getElementById(nombre+"Input").value;
+		var valor = document.getElementById(nombre + "Input").value;
 
 		// Se hace el string con el query
-		var query = `INSERT INTO custom (atributo, valor, idproducto) VALUES ('${nombre}', '${valor}', 10)`
-		
+		var query1 = `INSERT INTO custom (idproducto, valor, atributo, idCategoria) 
+		VALUES (10,'${valor}','${nombre}', ${idCategoria});`
+
 		// Se ejecuta el query
-		try
-		{	
-			await Pool.query(query);			
-		}
-		catch(e)
-		{
-			console.error("Error",e);
+		try {
+			await Pool.query(query1);
+		} catch (e) {
+			console.error("Error", e);
 			error = true;
 		}
 	}
@@ -160,4 +193,59 @@ async function saveProduct() {
 	formPropiedades.reset();
 	formGenerales.reset();
 
+}
+
+async function getCategorias() {
+
+	// Se selecciona el datalist
+	var datalist = document.getElementById('categorias');
+
+	// Se hace el string con el query
+	var query = 'SELECT descripcion FROM categorias ORDER BY id'
+
+	try {
+
+		// Se ejecuta el query
+		var response = await Pool.query(query);
+
+		// Se recorre la respuesta del query y se añaden las categorías al datalist
+		for (var i = 0; i < response.rows.length; i++) {
+			var dict = response.rows[i]
+			for (var key in dict) {
+				var option = document.createElement("option");
+				option.innerText = dict[key];
+				datalist.append(option);
+			}
+		}
+
+	} catch (e) {
+		console.error("Error", e);
+	}
+}
+
+async function getMarcas() {
+
+	// Se selecciona el datalist
+	var datalist = document.getElementById('marcas');
+
+	// Se hace el string con el query
+	var query = 'SELECT fabricante FROM marcas ORDER BY id'
+
+	// Se ejecuta el query
+	try {
+		var response = await Pool.query(query);
+
+		// Se recorre la respuesta del query y se añaden las categorías al datalist
+		for (var i = 0; i < response.rows.length; i++) {
+			var dict = response.rows[i]
+			for (var key in dict) {
+				var option = document.createElement("option");
+				option.innerText = dict[key];
+				datalist.append(option);
+			}
+		}
+
+	} catch (e) {
+		console.error("Error", e);
+	}
 }
