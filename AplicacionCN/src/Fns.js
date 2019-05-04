@@ -17,33 +17,23 @@ var config = {
 
 var Pool = new Pool(config);
 
-// FUNCIONES RELACIONADAS A LA TABLA DINÁMICA DE 'AGREGAR PRODUCTO'
 function addRow() {
 
-    var propiedad = document.getElementById("propiedad");
-    var valor = document.getElementById("valor");
-    var tabla = document.getElementById("tablaPropiedades");
+    var tabla = document.getElementById("tablaProductos");
 
-    if (propiedad.value == "" || valor.value == "") {
-        window.alert("Verifique que todos los campos sean válidos");
-    } else {
+    var rowCount = tabla.rows.length;
+    var row = tabla.insertRow(rowCount);
 
-        var rowCount = tabla.rows.length;
-        var row = tabla.insertRow(rowCount);
-
-        row.insertCell(0).innerHTML = propiedad.value;
-        row.insertCell(1).innerHTML = valor.value;
-        row.insertCell(2).innerHTML = '<a  style="margin: 5px" class="waves-effect waves-light btn-small" onClick="Javacsript:deleteRow(this)"><i class="material-icons">delete</a>';
-
-        document.getElementById("propiedadesForm").reset();
-    }
+    row.insertCell(0).innerHTML = '<input id="idProd1" type="text" class="validate" value="" style="margin:5px" required>';
+    row.insertCell(1).innerHTML = '<input id="cantProd1" type="number" class="validate" value="" max="10" min="0" style="margin:5px" required>';
+    row.insertCell(2).innerHTML = '<a  style="margin: 5px" class="waves-effect waves-light btn-small" onClick="Javacsript:deleteRow(this)"><i class="material-icons">delete</a>';
 
 };
 
 function deleteRow(obj) {
 
     var index = obj.parentNode.parentNode.rowIndex;
-    var table = document.getElementById("tablaPropiedades");
+    var table = document.getElementById("tablaProductos");
     table.deleteRow(index);
 
 };
@@ -200,7 +190,7 @@ async function getCategorias() {
     var datalist = document.getElementById('categorias');
 
     // Se hace el string con el query
-    var query = 'SELECT descripcion FROM categorias ORDER BY id'
+    var query = 'SELECT descripcion FROM categorias ORDER BY id';
 
     try {
 
@@ -228,7 +218,7 @@ async function getMarcas() {
     var datalist = document.getElementById('marcas');
 
     // Se hace el string con el query
-    var query = 'SELECT fabricante FROM marcas ORDER BY id'
+    var query = 'SELECT fabricante FROM marcas ORDER BY id';
 
     // Se ejecuta el query
     try {
@@ -251,16 +241,16 @@ async function getMarcas() {
 
 async function getLastId() {
 
-    var query = 'SELECT id FROM productos ORDER BY id DESC LIMIT 1;'
+    var query = 'SELECT id FROM productos ORDER BY id DESC LIMIT 1;';
     var newProductId = 0;
 
     try {
         var response = await Pool.query(query);
 
-        if (response.rows.length == 0){
+        if (response.rows.length == 0) {
             newProductId = 1;
 
-        } else{
+        } else {
             var dict = response.rows[0];
             newProductId = response.rows[0]['id'] + 1;
         }
@@ -268,5 +258,32 @@ async function getLastId() {
     } catch (e) {
         console.error("Error", e);
     }
-    return(newProductId);
+    return (newProductId);
+}
+
+function addProductRow() {
+
+    var productosDiv = document.getElementById("productos");
+
+    var div1 = document.createElement('div');
+    var div2 = document.createElement('div');
+
+    div1.innerHTML =
+        '<div class="input-field col s3 offset-s3">\
+            <input id="idProd1" type="text" class="validate" value="" required>\
+            <label for="idProd1">ID del producto</label>\
+        </div>';
+
+    div2.innerHTML =
+        '<div class="input-field col s3">\
+            <input id="cantProd1" type="number" class="validate" value="" max="10" min="0" required>\
+            <label for="cantProd1">Cantidad</label>\
+        </div>';
+
+    productosDiv.appendChild(div1);
+    productosDiv.appendChild(div2);
+}
+
+function removeProductRow() {
+    document.getElementById('content').removeChild(input.parentNode);
 }

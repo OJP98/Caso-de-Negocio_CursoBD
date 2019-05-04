@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Datos del head -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Agregar Producto</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="Fns.js"></script>
+
+</head>
+
+<!-- Barra de navegación -->
+<nav class="fixed-nav-bar">
+    <div class="nav-wrapper">
+        <a id="nombreDeLaTienda" href="index.html" class="brand-logo center"></a>
+        <ul class="left hide-on-med-and-down">
+            <li><a href="index.html"><i class="material-icons">keyboard_backspace</i></a></li>
+        </ul>
+    </div>
+</nav>
+
+<body>
+
+    <h4 class="center">Realizar Venta</h4>
+
+    <br>
+
+    <div class="container">
+
+        <!-- Espacio para NIT y validarlo -->
+        <div class="row">
+
+            <form id="formGeneral">
+
+                <!-- Input del NIT -->
+                <div class="input-field col s4 offset-s3">
+                    <input id="nitInput" type="text" class="validate" value="" required>
+                    <label for="nitInput">Ingrese su NIT</label>
+                    <span class="helper-text" data-error="Por favor complete el campo"></span>
+                </div>
+
+                <!-- Boton para validación del NIT -->
+                <div class="col s4">
+                    <a id="validarBtn" style="margin: 15px" class="waves-effect waves-light btn">
+                        <i class="material-icons right">done</i>Validar</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Mensaje para validación de NIT -->
+        <div id="nitValidate" class="center">
+            <h6 id="nitValidateMessage">¡El NIT es válido/inválido!</h6>
+        </div>
+        <hr><br>
+
+        <h4 class="center">Ingresar Productos</h4>
+
+        <!-- <div class="center container">
+            <table id="tablaProductos" class="highlight centered">
+                <thead>
+                    <tr>
+                        <th width="30%"><b>ID Producto</b></th>
+                        <th width="20%"><b>Cantidad</b></th>
+                        <th width="20%"><b>¿Eliminar?</b></th>
+                    </tr>
+                </thead>
+
+                <tbody id="tablaCont">
+                </tbody>
+            </table>
+        </div> -->
+
+        <div id="productos" class="row">
+
+            <!-- Campo para adquirir un producto -->
+            <div class="input-field col s3 offset-s3">
+                <input id="idProd1" type="text" class="validate" value="" required>
+                <label for="idProd1">ID del producto</label>
+                <!-- <span class="helper-text" data-error="Por favor complete el campo"></span> -->
+            </div>
+
+            <!-- Campo para ingresar cantidad del producto -->
+            <div class="input-field col s3">
+                <input id="cantProd1" type="number" class="validate" value="" max="10" min="0" required>
+                <label for="cantProd1">Cantidad</label>
+                <!-- <span class="helper-text" data-error="Por favor complete el campo"></span> -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Botones para agregar o eliminar último productos -->
+    <div class="row center">
+        <a style="margin: 5px" class="waves-effect waves-light btn" onclick="addProductRow()">
+            <i class="material-icons">add</i></a>
+        <a style="margin: 5px" class="waves-effect waves-light btn">
+            <i class="material-icons">delete</i></a>
+    </div>
+
+
+    <script>
+        window.$ = window.jQuery = require("jquery");
+    </script>
+
+    <script>
+        document.getElementById("nombreDeLaTienda").innerHTML = localStorage['NombreTienda'] || 'Nombre de la tienda';
+
+        $(document).ready(function() {
+
+        });
+    </script>
+
+</body>
+
+</html>
