@@ -1,0 +1,19 @@
+{
+  "name": "aplicacion_cn",
+  "version": "1.0.0",
+  "description": "Proyecto caso de uso, bases de datos",
+  "main": "src/js/index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "UVG",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^5.0.1"
+  },
+  "dependencies": {
+    "jquery": "^3.4.1",
+    "pg": "^7.10.0",
+    "pg-pool": "^2.0.6"
+  }
+}

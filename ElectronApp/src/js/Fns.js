@@ -313,12 +313,19 @@ function removeProductRow() {
         $('#productos').children().last().remove();
         newDivId -= 1;
 
-    } else {
-        // Muestra un mensaje de alerta
-        alert("No hay más productos por eliminar");
+    // } else {
+    //     // Muestra un mensaje de alerta
+    //     alert("No hay más productos por eliminar");
     }
 }
 
 function createProductsWindow() {
     ipcRenderer.send('show-products');
+}
+
+function exitApplication() {
+    const remote = require('electron').remote;
+    let w = remote.getCurrentWindow();
+    w.close();
+
 }
