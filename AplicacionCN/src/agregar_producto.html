@@ -115,19 +115,21 @@
         getMarcas();
         document.getElementById("nombreDeLaTienda").innerHTML = localStorage['NombreTienda'] || 'Nombre de la tienda';
 
-        $(document).ready(function () {
+        $(document).ready(function() {
 
-            $('#cancelarBtn2').click(function () {
+            $('#cancelarBtn2').click(function() {
                 window.history.back();
             });
 
-            $('#continuarBtn').click(function () {
+            $('#continuarBtn').click(function() {
                 getAttributes();
                 $('#propiedades').slideDown();
             });
 
-            $('#guardarBtn').click(function () {
-                saveProduct();
+            $('#guardarBtn').click(function() {
+                getLastId().then(function(id) {
+                    saveProduct(id);
+                });
             });
 
         });
