@@ -12,9 +12,6 @@ var Pool = new Pool(config);
 document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('select');
     var instances = M.FormSelect.init(elems, "inicializar");
-    // var instance = M.FormSelect.getInstance(elems);
-
-    // console.log(instances.getSelectedValues());
 });
 
 function componentToHex(c) {
@@ -36,20 +33,17 @@ function rgbToHex(r, g, b) {
 
 async function graficar(){
     var canvas = document.getElementById('chart');
-    var ctx = canvas.getContext('2d');
-    ctx.beginPath();
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.restore();
-
+    var divChart = document.getElementById('grafica');
+    divChart.style.display = '';
     var grafica = document.getElementById('chartId').value;
     var titulos = [];
     var datos = [];
     var color = [];
+    var ventas = [];
+    var informacion = {};
     var r, g, b = 0;
     var textos = '';
+    var display = true;
 
     if(grafica == 'pie' || grafica == 'bar' || grafica == 'horizontalBar' || grafica == 'polarArea'){
         var variable = document.querySelector('input[name=group1]:checked').value;
@@ -57,12 +51,17 @@ async function graficar(){
         var variable = document.querySelector('input[name=group2]:checked').value;
     }
 
+    if(grafica == 'bar' || grafica == 'horizontalBar' || grafica == 'line'){
+        display = false;
+    }else if(grafica == 'pie'){
+        display = true;
+    }
+
     if(variable == 'cliente'){
         var query = 'SELECT nombre as "titulo", SUM(total) as "suma" FROM facturas as f JOIN clientes as c ON f.clienteid = c.id GROUP BY nombre;';
         var response = await Pool.query(query);
         textos = 'Ventas por cliente';
     }else if(variable == 'marca'){
-        // console.log('marca');
         var query = 'SELECT fabricante as "titulo", SUM(precio * cantidad) as "suma" FROM lineas_de_facturas as lf JOIN productos as p ON lf.idproducto = p.id JOIN marcas as m ON m.id = p.idmarca GROUP BY fabricante;';
         var response = await Pool.query(query);
         textos = 'Ventas por marca';
@@ -82,48 +81,112 @@ async function graficar(){
         var query = 'SELECT month_actual as "titulo", SUM(total) as "suma" FROM facturas as f JOIN d_date as d ON f.fecha = d.date_actual GROUP BY month_actual;';
         var response = await Pool.query(query);
         textos = 'Ventas por mes';
+    }else if(variable == 'trimestre'){
+        var query = 'SELECT quarter_actual as "titulo", SUM(total) as "suma" FROM facturas as f JOIN d_date as d ON f.fecha = d.date_actual GROUP BY quarter_actual;';
+        var response = await Pool.query(query);
+        textos = 'Ventas por trimestre';
+    }
+
+    if(variable == 'cliente' || variable == 'marca' || variable == 'categoria' || variable == 'producto'){
+        for(var i = 0; i < response.rows.length; i++){
+            titulos.push(response.rows[i].titulo);
+            datos.push(response.rows[i].suma);
+    
+            r = getRandom(0, 255);
+            g = getRandom(0, 255);
+            b = getRandom(0, 255);
+    
+            color.push(rgbToHex(r, g, b));
+        }
+
+        new Chart(canvas, {
+            type: grafica,
+            data: {
+            labels: titulos,
+            datasets: [
+                {
+                backgroundColor: color,
+                data: datos
+                }
+            ]},
+            options: {
+                legend: { display: display },
+                title: {
+                    display: true,
+                    text: textos
+                }
+            }
+        });
+    }else if(variable == 'anio' || variable == 'mes' || variable == 'trimestre'){
+        if(grafica == 'bar' || grafica == 'horizontalBar' || grafica == 'pie'){
+            for(var i = 0; i < response.rows.length; i++){
+                titulos.push(response.rows[i].titulo);
+                datos.push(response.rows[i].suma);
+        
+                r = getRandom(0, 255);
+                g = getRandom(0, 255);
+                b = getRandom(0, 255);
+        
+                color.push(rgbToHex(r, g, b));
+            }
+    
+            new Chart(canvas, {
+                type: grafica,
+                data: {
+                labels: titulos,
+                datasets: [
+                    {
+                    backgroundColor: color,
+                    data: datos
+                    }
+                ]},
+                options: {
+                    legend: { display: display },
+                    title: {
+                        display: true,
+                        text: textos
+                    }
+                }
+            });
+        }else{
+            for(var i = 0; i < response.rows.length; i++){
+                titulos.push(response.rows[i].titulo);
+                datos.push(response.rows[i].suma);
+            }
+    
+            r = getRandom(0, 255);
+            g = getRandom(0, 255);
+            b = getRandom(0, 255);
+    
+            new Chart(canvas, {
+                type: grafica,
+                data: {
+                labels: titulos,
+                datasets: [
+                    {
+                    backgroundColor: rgbToHex(r, g, b),
+                    data: datos
+                    }
+                ]},
+                options: {
+                    legend: { display: display },
+                    title: {
+                        display: true,
+                        text: textos
+                    }
+                }
+            });
+        }
+        
     }
     
-    for(var i = 0; i < response.rows.length; i++){
-        titulos.push(response.rows[i].titulo);
-        datos.push(response.rows[i].suma);
-
-        r = getRandom(0, 255);
-        g = getRandom(0, 255);
-        b = getRandom(0, 255);
-
-        color.push(rgbToHex(r, g, b));
-        textos = 'Ventas por clientes';
-    }
-    // console.log(titulos);
-    // console.log(datos);
-
-    new Chart(canvas, {
-        type: grafica,
-        data: {
-        labels: titulos,
-        datasets: [
-            {
-            // label: "Population (millions)",
-            backgroundColor: color,
-            data: datos
-            }
-        ]},
-        options: {
-            legend: { display: false },
-            title: {
-                display: true,
-                text: textos
-            }
-        }
-    });
 }
 
 function selectChart(seleccion){
     var divPie = document.getElementById('graficaPie');
     var divDispersion = document.getElementById('graficaDispersion');
     console.log(seleccion.value);
-    if(seleccion.value == 'pie' || seleccion.value == 'bar' || seleccion.value == 'horizontalBar' || seleccion.value == 'polarArea'){
+    if(seleccion.value == 'pie' || seleccion.value == 'bar' || seleccion.value == 'horizontalBar'){
         divPie.style.display = '';
         divDispersion.style.display = 'none';
     } else if(seleccion.value == 'line'){

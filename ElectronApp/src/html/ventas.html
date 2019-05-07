@@ -3,47 +3,63 @@
 
 <head>
 
-  <meta charset="utf-8">
-  <title>Simulación de ventas</title>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link rel="stylesheet" href="../css/ventas.css">
-  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+    <meta charset="utf-8">
+    <title>Simulación de ventas</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../css/ventas.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
   
 </head>
 
+<nav class="fixed-nav-bar">
+    <div class="nav-wrapper">
+        <a id="nombreDeLaTienda" href="index.html" class="brand-logo center"></a>
+        <ul class="left hide-on-med-and-down">
+            <li><a href="index.html"><i class="material-icons">keyboard_backspace</i></a></li>
+        </ul>
+    </div>
+</nav>
+
 <body>
-    <h1 class="titulo1">Simulación de ventas</h1>
+    <h4 class="center">Estadísticas</h4>
 
-    <div class="row">
-        <h3 class="titulo3">Rango de fechas</h3>
-        <div class="column">
-            <p>Fecha inicial</p>
-            <div class="input-container">
-                <input id="fechaInicial" type="date">
+    <div class="movido">
+        <h5>Rango de fechas</h5>
+        <div class="row">
+            
+            <div class="col s6">
+                <p>Fecha inicial</p>
+                <input id="inicio" type="text" class="datepicker" style="width: 50%;" placeholder="Seleccione fecha inicial">
             </div>
-        </div>
 
-        <div class="column">
-            <p>Fecha final</p>
-            <div class="input-container">
-                <input id="fechaFinal" type="date">
+            <div class="col s6">
+                <p>Fecha final</p>
+                <input id="final" type="text" class="datepicker" style="width: 50%;" placeholder="Seleccione fecha final">
             </div>
         </div>
     </div>
 
-    <div>
-        <h3 class="titulo3">Cantidad de ventas</h3>
+    <div class="movido">
+        <h5>Cantidad de ventas</h5>
         <div class="numberInput">
-            <input id="cantidad" type="number" min="1" placeholder="Cantidad de ventas">
+            <input id="cantidad" type="number" min="1" style="width: 25%;" placeholder="Cantidad de ventas">
         </div>
     </div>
 
     <br>
-    <div style="text-align:center;">
-        <button class="button" onclick="crearFacturas()"><span>Crear ventas</span></button>
-    </div>  
+    <div class="center">
+        <button class="btn waves-effect waves-light" type="submit" name="action" onclick="crearFacturas()">Crear ventas
+            <i class="material-icons right">send</i>
+        </button>
+    </div>
+
     <script src="../js/ventas.js"></script>
+
+    
 </body>
 
 </html>

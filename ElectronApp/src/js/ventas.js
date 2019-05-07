@@ -2,6 +2,7 @@
 var Pool = require('pg').Pool;
 
 var tiendas = ["Tienda A", "Tienda B", "Tienda C"];
+var meses = ['Jan', 'Feb', 'Mar', 'Apr', 'May', "Jun", 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 var config = {
     user: 'postgres',
@@ -12,6 +13,16 @@ var config = {
 
 var Pool = new Pool(config);
 
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.datepicker');
+    var options = {
+        autoClose: true,
+        yearRange: 30,
+        maxDate: new Date('Dec 31, 2019')
+    }
+    var instances = M.Datepicker.init(elems, options);
+});
+
 function getRandom(min, max){
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -21,16 +32,12 @@ function getRandom(min, max){
 }
 
 async function crearFacturas() {
-    var fechaInicial = document.getElementById("fechaInicial").value;
-    var fechaFinal = document.getElementById("fechaFinal").value;
+    var fechaInicial = document.getElementById("inicio").value;
+    var fechaFinal = document.getElementById("final").value;
     var lineas = parseInt(document.getElementById("cantidad").value);
     var response = await Pool.query('SELECT MAX(id) FROM facturas');
+    console.log(fechaInicial);
 
-    // if(response.rows[0].max == null){
-    //     console.log("Es null " + response.rows[0].max);
-    // }
-    
-    
     try {
         for(var i = 0; i < lineas; i++){
             var response = await Pool.query('SELECT MAX(id), MIN(id) FROM clientes');
@@ -51,13 +58,17 @@ async function crearFacturas() {
                 minimoProducto = 1;
             }
 
-            var anoI = parseInt(String(fechaInicial).substring(0, 4));
-            var mesI = parseInt(String(fechaInicial).substring(5, 7));
-            var diaI = parseInt(String(fechaInicial).substring(8, 10));
+            var mes = String(fechaInicial).substring(0, 3);
+            var diaI = parseInt(String(fechaInicial).substring(4, 6));
+            var anoI = parseInt(String(fechaInicial).substring(8, 12));
 
-            var anoF = parseInt(String(fechaFinal).substring(0, 4));
-            var mesF = parseInt(String(fechaFinal).substring(5, 7));
-            var diaF = parseInt(String(fechaFinal).substring(8, 10));
+            var mesI = meses.indexOf(mes) + 1;
+
+            var mes = String(fechaFinal).substring(0, 3);
+            var diaF = parseInt(String(fechaFinal).substring(4, 6));
+            var anoF = parseInt(String(fechaFinal).substring(8, 12));
+
+            var mesF = meses.indexOf(mes) + 1;
 
             var nuevaFactura = getRandom(1, 2);
             var response = await Pool.query('SELECT MAX(id) FROM facturas');
@@ -67,6 +78,8 @@ async function crearFacturas() {
                 var ano = getRandom(anoI, anoF);
                 var mes = getRandom(mesI, mesF);
                 var dia = getRandom(diaI, diaF);
+
+                console.log(ano + " " + mes + " " + dia)
                 var tipoTienda = tiendas[getRandom(0, tiendas.length - 1)];
                 // console.log(tipoTienda);
                 var query = "INSERT INTO facturas(clienteId, fecha, total, tienda) VALUES(" + idCliente + ", '" + ano + "-" + mes + "-" + dia + "', NULL, '" + tipoTienda +"');";
@@ -103,10 +116,6 @@ async function crearFacturas() {
     var response = await Pool.query(query);
 }
 
-// var connectionString = 'postgres://localhost/proyecto2DB';
-
-// var pgClient = new pg.Client(connectionString);
-// pgClient.connect();
 
 
 

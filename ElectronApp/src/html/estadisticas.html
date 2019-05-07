@@ -46,7 +46,6 @@
             <option value="bar">Gráfica de barras vertical</option>
             <option value="horizontalBar">Gráfica de barras horizontal</option>
             <option value="line">Gráfica de dispersión</option>
-            <option value="polarArea">Gráfica de área polar</option>
         </select>
     </div>
     
@@ -98,32 +97,36 @@
         </div>
     
         
-        <div id="graficaDispersion" style="display:none;" class="row movido2">
-            <form action="#">
+        <div id="graficaDispersion" style="display:none;" class="row movido">
+            <div class="col s4">
                 <p>
                     <label>
                         <input class="with-gap" name="group2" type="radio" checked value="anio"/>
-                        <span>Ventas por cada año.</span>
+                        <span>Ventas totales por cada año.</span>
                     </label>
                 </p>
+            </div>
+            <div class="col s4">
                 <p>
                     <label>
                         <input class="with-gap" name="group2" type="radio" value="mes"/>
-                        <span>Ventas por cada mes.</span>
+                        <span>Ventas totales por cada mes.</span>
                     </label>
                 </p>
+            </div>
+            <div class="col s4">
                 <p>
                     <label>
                         <input class="with-gap" name="group2" type="radio" value="trimestre"/>
-                        <span>Ventas por cada trimestre.</span>
+                        <span>Ventas totales por cada trimestre.</span>
                     </label>
                 </p>
-            </form>
+            </div>
         </div>
     </div>
     
 
-    <div id="grafica" style="display:''" class="centrado">
+    <div id="grafica" style="display:none" class="centrado">
         <canvas id="chart" width="300" height="80"></canvas>
     </div>
     
