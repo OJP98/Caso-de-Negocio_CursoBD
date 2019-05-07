@@ -77,6 +77,15 @@ CREATE TABLE lineas_de_facturas
 	FOREIGN KEY (idProducto) REFERENCES productos (id)
 );
 
+DROP TABLE IF EXISTS d_date;
+CREATE TABLE d_date
+(
+  date_actual              DATE NOT NULL,
+  week_of_year             INT NOT NULL,
+  month_actual             INT NOT NULL,
+  quarter_actual           INT NOT NULL,
+  year_actual              INT NOT NULL
+);
 
 DROP FUNCTION IF EXISTS updateSUMTotal;
 CREATE OR REPLACE FUNCTION updateSUMTotal() 
@@ -123,8 +132,41 @@ LANGUAGE PLPGSQL;
 DROP TRIGGER IF EXISTS updateTotal ON lineas_de_facturas;
 CREATE TRIGGER updateTotal AFTER INSERT ON lineas_de_facturas FOR EACH ROW EXECUTE PROCEDURE updateSUMTotal(); 
 
+-- stats clientes
+SELECT nombre as "titulo", SUM(total) as "suma"
+FROM facturas as f
+JOIN clientes as c ON f.clienteid = c.id
+GROUP BY nombre;
 
---select data->>'Talla' from custom
+-- stats marcas
+SELECT fabricante, SUM(precio * cantidad)
+FROM lineas_de_facturas as lf
+JOIN productos as p ON lf.idproducto = p.id
+JOIN marcas as m ON m.id = p.idmarca
+GROUP BY fabricante;
+
+
+SELECT *
+FROM facturas as f
+JOIN lineas_de_facturas as lf ON f.id = lf.facturaId
+JOIN productos as p ON p.id = lf.idproducto
+JOIN categorias as c ON c.id = p.idcategoria
+JOIN marcas as m ON m.id = p.idmarca
+GROUP BY descripcion;
+
+-- INSERT INTO d_date
+-- SELECT datum AS date_actual,
+--        EXTRACT(week FROM datum) AS week_of_year,
+--        EXTRACT(MONTH FROM datum) AS month_actual,
+-- 		EXTRACT(quarter FROM datum) AS quarter_actual,
+--        EXTRACT(isoyear FROM datum) AS year_actual
+						  
+-- FROM (SELECT '1970-01-01'::DATE+ SEQUENCE.DAY AS datum
+--       FROM GENERATE_SERIES (0,29219) AS SEQUENCE (DAY)
+--       GROUP BY SEQUENCE.DAY) DQ
+-- ORDER BY 1;
+
+--SELECT * FROM d_date;
 
 INSERT INTO clientes(nombre, nit) VALUES('Javier Carpio', '577019-K');
 INSERT INTO clientes(nombre, nit) VALUES('Jose Cifuentes', '123456-K');
@@ -152,8 +194,8 @@ INSERT INTO datos (atributo, tipo_dato, idcategoria) VALUES ('Material', 'VARCHA
 -- SELECT * FROM clientes;
 -- SELECT * FROM categorias;
 -- SELECT * FROM productos;
--- SELECT * FROM facturas;
--- SELECT * FROM lineas_de_facturas;
+SELECT * FROM facturas ORDER BY id;
+SELECT * FROM lineas_de_facturas WHERE facturaid = 6;
 -- SELECT * FROM productos;
 -- SELECT * FROM datos;
 -- SELECT * FROM custom;
