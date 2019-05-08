@@ -42,20 +42,32 @@
             <form id="formGeneral">
 
                 <!-- Input del NIT -->
-                <div class="input-field col s4 offset-s3">
-                    <input id="nitInput" type="text" class="validate" value="" required>
+                <div class="input-field col s4 offset-s4">
+                    <input id="nitInput" type="text" onchange="validarNIT()" class="validate" value="" required>
                     <label for="nitInput">Ingrese su NIT</label>
+                    <span class="helper-text" data-error="Por favor complete el campo"></span>
+                </div>
+
+            </form>
+        </div>
+        <div id="nuevo" class="row" style="display:none">
+
+            <form id="formGeneral2">
+                <h6 class="center">NIT no registrado</h6>
+                <!-- Input del NIT -->
+                <div class="input-field col s4 offset-s3">
+                    <input id="nombreInput" type="text" class="validate" value="" required>
+                    <label for="nombreInput">Ingrese su nombre</label>
                     <span class="helper-text" data-error="Por favor complete el campo"></span>
                 </div>
 
                 <!-- Boton para validación del NIT -->
                 <div class="col s4">
-                    <a id="validarBtn" style="margin: 15px" class="waves-effect waves-light btn">
-                        <i class="material-icons right">done</i>Validar</a>
+                    <a id="guardarUsuario" style="margin: 15px" class="waves-effect waves-light btn" onclick="guardarUsuario()">
+                        <i class="material-icons right">person_add</i>Guardar usuario</a>
                 </div>
             </form>
         </div>
-
         <!-- Mensaje para validación de NIT -->
         <!-- <div id="nitValidate" class="center">
             <h6 id="nitValidateMessage">¡El NIT es válido/inválido!</h6>

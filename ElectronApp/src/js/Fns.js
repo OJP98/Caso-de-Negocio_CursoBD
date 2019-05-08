@@ -12,13 +12,20 @@ var idCategoria = 1,
 
 var atributos = []
 
+// var config = {
+//     user: 'postgres',
+//     database: 'proyecto2',
+//     password: 'postgres',
+//     host: '127.0.0.1',
+//     port: 5432,
+//     max: 10,
+// };
+
 var config = {
     user: 'postgres',
-    database: 'proyecto2',
-    password: 'postgres',
-    host: '127.0.0.1',
-    port: 5432,
-    max: 10,
+    password: 'Javiercarpio1',
+    database: 'proyecto2DB'
+    
 };
 
 var Pool = new Pool(config);
@@ -87,6 +94,45 @@ function addInputs(atributo, tipo_dato) {
     // Se añade el div al form
     form.append(div);
 
+}
+
+async function validarNIT(){
+    var nit = document.getElementById('nitInput').value;
+
+    if(nit.length == 8){
+        var query = "SELECT nombre as nombres FROM clientes WHERE nit = '" + nit + "';";
+
+        var response = await Pool.query(query);
+        var persona = response.rows[0];
+        var divNombre = document.getElementById('nuevo');
+
+        if(persona != undefined){
+            console.log("Nombre: " + persona.nombres);
+            divNombre.style.display = 'none';
+        }else{
+            console.log("No existe el nit");
+            divNombre.style.display = '';
+
+        }
+    }else{
+        if(nit.length != 0){
+            M.toast({html: 'NIT invalido', classes: 'rounded'});
+        }
+    }
+}
+
+async function guardarUsuario(){
+    var nit = document.getElementById('nitInput').value;
+    var nombre = document.getElementById('nombreInput').value;
+
+    if(nit.length != '' && nombre.length != ''){
+        var query = "INSERT INTO clientes(nombre, nit) VALUES('" + nombre + "', '" + nit + "');";
+        var response = await Pool.query(query);
+        var divNombre = document.getElementById('nuevo');
+        divNombre.style.display = 'none';
+        M.toast({html: '¡Usuario creado!', classes: 'rounded'});
+
+    }
 }
 
 async function getAttributes() {

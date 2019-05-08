@@ -39,8 +39,6 @@ async function graficar(){
     var titulos = [];
     var datos = [];
     var color = [];
-    var ventas = [];
-    var informacion = {};
     var r, g, b = 0;
     var textos = '';
     var display = true;
