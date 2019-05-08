@@ -18,3 +18,8 @@ td {
     border: 1px solid #DBDBDB;
     padding-left: 20px;
 }
+
+button,
+a {
+    -webkit-app-region: no-drag;
+}

@@ -1,5 +1,6 @@
 var $ = require('jQuery');
 var Pool = require('pg').Pool;
+var prodsWindow = false;
 
 const {
     ipcRenderer
@@ -313,19 +314,60 @@ function removeProductRow() {
         $('#productos').children().last().remove();
         newDivId -= 1;
 
-    // } else {
-    //     // Muestra un mensaje de alerta
-    //     alert("No hay más productos por eliminar");
+        // Por alguna razón, al usar este else, truena :(
+        // } else {
+        //     // Muestra un mensaje de alerta
+        //     alert("No hay más productos por eliminar");
     }
 }
 
+// Crea una nueva pantalla con los productos
 function createProductsWindow() {
+
     ipcRenderer.send('show-products');
+
 }
 
+// Funcion que permite salir de la aplicacion cuando se cierra la ventana principal
 function exitApplication() {
     const remote = require('electron').remote;
-    let w = remote.getCurrentWindow();
-    w.close();
+    let win = remote.getCurrentWindow();
+    win.close();
+
+}
+
+// Obitiene e inserta los productos en la tabla de productos
+async function getProducts() {
+
+    var query =
+        'SELECT p.id, m.fabricante, p.nombre, p.precio\
+    FROM productos p INNER JOIN marcas m ON m.id = p.idmarca\
+    INNER JOIN categorias c ON c.id = p.idcategoria\
+    ORDER BY c.descripcion;'
+
+    var tabla = document.getElementById('tablaProductos');
+
+    // Se ejecuta el query
+    try {
+        var response = await Pool.query(query);
+
+        // Se recorre la respuesta del query y se añaden los productos a la tabla
+        for (var i = 0; i < response.rows.length; i++) {
+
+            // Se crea un diccionario por fila
+            var dict = response.rows[i]
+
+            // Se inserta en la última posición de la tabla
+            var row = tabla.insertRow(-1);
+
+            // Se insertan los valores por columna
+            row.insertCell(0).innerHTML = dict["id"];
+            row.insertCell(1).innerHTML = dict["fabricante"];
+            row.insertCell(2).innerHTML = dict["nombre"];
+            row.insertCell(3).innerHTML = dict["precio"];
+        }
+    } catch (e) {
+        alert("Error", e);
+    }
 
 }

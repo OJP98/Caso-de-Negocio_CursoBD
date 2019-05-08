@@ -18,99 +18,48 @@
 
 </head>
 
-<!-- Barra de navegación -->
-<nav class="fixed-nav-bar">
-    <div class="nav-wrapper">
-        <a id="nombreDeLaTienda" href="../html/index.html" class="brand-logo center"></a>
-        <ul class="left hide-on-med-and-down">
-            <li><a href="../html/index.html"><i class="material-icons">keyboard_backspace</i></a></li>
-        </ul>
-    </div>
-</nav>
+<body style="margin-top: 20px; -webkit-app-region: drag">
 
-<body>
-
-    <h4 class="center">Realizar Venta</h4>
+    <!-- Titulo de la vista -->
+    <h4 class="center">Tabla de productos</h4>
 
     <br>
 
+    <!-- Container de la tabla -->
     <div class="container">
 
-        <!-- Espacio para NIT y validarlo -->
-        <div class="row">
-
-            <form id="formGeneral">
-
-                <!-- Input del NIT -->
-                <div class="input-field col s4 offset-s3">
-                    <input id="nitInput" type="text" class="validate" value="" required>
-                    <label for="nitInput">Ingrese su NIT</label>
-                    <span class="helper-text" data-error="Por favor complete el campo"></span>
-                </div>
-
-                <!-- Boton para validación del NIT -->
-                <div class="col s4">
-                    <a id="validarBtn" style="margin: 15px" class="waves-effect waves-light btn">
-                        <i class="material-icons right">done</i>Validar</a>
-                </div>
-            </form>
-        </div>
-
-        <!-- Mensaje para validación de NIT -->
-        <div id="nitValidate" class="center">
-            <h6 id="nitValidateMessage">¡El NIT es válido/inválido!</h6>
-        </div>
-        <hr><br>
-
-        <h4 class="center">Ingresar Productos</h4>
-
-        <div id="productos" class="row">
-
-            <!-- Campo para adquirir un producto -->
-            <div class="input-field col s3 offset-s3">
-                <input id="idProd1" type="text" class="validate" value="" required>
-                <label for="idProd1">ID del producto</label>
-                <!-- <span class="helper-text" data-error="Por favor complete el campo"></span> -->
-            </div>
-
-            <!-- Campo para ingresar cantidad del producto -->
-            <div class="input-field col s3">
-                <input id="cantProd1" type="number" class="validate" value="" max="10" min="0" required>
-                <label for="cantProd1">Cantidad</label>
-                <!-- <span class="helper-text" data-error="Por favor complete el campo"></span> -->
-            </div>
-        </div>
+        <!-- Apartado de la tabla -->
+        <table id="tablaProductos" class="highlight" cellpadding="0">
+            <thead>
+                <tr>
+                    <th width="10%"><b>ID</b></th>
+                    <th width="30%"><b>Marca</b></th>
+                    <th width="40%"><b>Nombre</b></th>
+                    <th width="20%"><b>Precio</b></th>
+                </tr>
+            </thead>
+            <tbody id="productosBody">
+            </tbody>
+        </table>
 
     </div>
 
+    <br><br><br>
     <!-- Botones para agregar o eliminar último productos -->
     <div class="row center">
-        <a style="margin: 5px" class="waves-effect waves-light btn" onclick="addProductRow()">
-            <i class="material-icons">add</i></a>
-        <a style="margin: 5px" class="waves-effect waves-light btn" onclick="removeProductRow()">
-            <i class="material-icons">delete</i></a>
+        <a style="margin: 5px" class="waves-effect waves-light btn" onclick="exitApplication()">
+            <i class="material-icons left">exit_to_app</i>Cerrar</a>
     </div>
 
-    <br><br>
+    <br>
 
-    <!-- Botones para hacer venta o cancelar -->
-    <div class="row center">
-        <a id="comprarBtn" style="margin: 40px" class="waves-effect waves-light btn-large">
-            <i class="material-icons right">shopping_cart</i>Hacer venta</a>
-        <a id="cancelarBtn" style="margin: 40px" class="waves-effect waves-light btn-large">
-            <i class="material-icons right">cancel</i>Cancelar</a>
-    </div>
-
+    <!-- SCRIPTS -->
     <script>
         window.$ = window.jQuery = require("jquery");
     </script>
 
     <script>
-        document.getElementById("nombreDeLaTienda").innerHTML = localStorage['NombreTienda'] || 'Nombre de la tienda';
-
-        $(document).ready(function () {
-
-        });
+        getProducts();
     </script>
 
 

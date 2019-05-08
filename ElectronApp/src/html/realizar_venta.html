@@ -57,10 +57,11 @@
         </div>
 
         <!-- Mensaje para validación de NIT -->
-        <div id="nitValidate" class="center">
+        <!-- <div id="nitValidate" class="center">
             <h6 id="nitValidateMessage">¡El NIT es válido/inválido!</h6>
         </div>
-        <hr><br>
+        <hr><br> -->
+        <hr>
 
         <h4 class="center">Ingresar Productos</h4>
 
@@ -89,9 +90,11 @@
             <i class="material-icons">add</i></a>
         <a style="margin: 5px" class="waves-effect waves-light btn" onclick="removeProductRow()">
             <i class="material-icons">delete</i></a>
+        <a style="margin: 5px" class="waves-effect waves-light btn" onclick="createProductsWindow()">
+            <i class="material-icons">assignment</i></a>
     </div>
 
-    <br><br>
+    <br>
 
     <!-- Botones para hacer venta o cancelar -->
     <div class="row center">
@@ -101,6 +104,8 @@
             <i class="material-icons right">cancel</i>Cancelar</a>
     </div>
 
+    <br><br><br><br>
+
     <script>
         window.$ = window.jQuery = require("jquery");
     </script>
@@ -108,14 +113,14 @@
     <script>
         document.getElementById("nombreDeLaTienda").innerHTML = localStorage['NombreTienda'] || 'Nombre de la tienda';
 
-        $(document).ready(function () {
+        $(document).ready(function() {
 
-            $('#cancelarBtn').click(function () {
+            $('#cancelarBtn').click(function() {
                 window.history.back();
             });
 
-            $('#validarBtn').click(function () {
-                createProductsWindow();
+            $('#validarBtn').click(function() {
+                // PROGRAMAR FUNCION DE VALIDAR AQUÍ;
             });
 
         });
