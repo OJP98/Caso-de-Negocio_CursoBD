@@ -8,6 +8,7 @@
     <title>Estadísticas</title>
 
     <script src="../js/estadisticas.js"></script>
+    <script src="../js/Fns2.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -24,6 +25,7 @@
 <!-- Barra de navegación -->
 <nav class="fixed-nav-bar">
     <div class="nav-wrapper">
+            <a href="../html/index.html" class="brand-logo center" id="nombreDeLaTienda"></a>
         <a id="nombreDeLaTienda" href="index.html" class="brand-logo center"></a>
         <ul class="left hide-on-med-and-down">
             <li><a href="index.html"><i class="material-icons">keyboard_backspace</i></a></li>
@@ -31,7 +33,7 @@
     </div>
 </nav>
 
-<body>
+<body onload="iniciar()">
 
     <h4 class="center">Estadísticas</h4>
 

@@ -1,9 +1,22 @@
+var Pool = require('pg').Pool;
+
+var config = {
+    user: 'postgres',
+    password: 'jeje',
+    database: 'proyecto2DB'
+    
+};
+
+var Pool = new Pool(config);
+
+
+
+
 function iniciar() 
 {
     console.log(localStorage['CustomData']);
     document.getElementById("nombreDeLaTienda").innerHTML=localStorage['NombreTienda']|| 'Nombre de la tienda';
 }
-
 
 
 function ingresarNombreTienda()
@@ -20,12 +33,46 @@ var col1=[];
 var col2=[];
 
 
+async function ingresarInformacion()
+{
+    var categoria=document.getElementById("NomCat").value;
+    console.log(categoria);
 
+    var query = "select * from categorias  where descripcion LIKE '"+categoria+"'"+";";
+    var response = await Pool.query(query);
+    var id;
 
+    if(response.rowCount===0)
+    {
+        var query = "INSERT INTO categorias(descripcion) VALUES('"+categoria+"');";
+        var response = await Pool.query(query);
+        console.log(response);
 
+        var query2 = "select max(id) from categorias";
+        var response = await Pool.query(query2);
+        id=response.rows[0].max;
+        console.log(id);
+    }
+    else
+    {
+        var query = "select id from categorias where descripcion LIKE '"+categoria+"';";
+        var response = await Pool.query(query);
+        id=response.rows[0].id;
+    }
+    
+
+    for (var i = 0; i < col1.length; i+=1) 
+    {
+        var query3 = `INSERT INTO datos (atributo, tipo_dato, idcategoria) VALUES ('${col1[i]}','${col2[i]}','${id}');`;
+        var response = await Pool.query(query3);
+
+    }
+      
+
+}
 
 // FUNCIONES RELACIONADAS A LA TABLA DINÁMICA DE 'configurar.html'
-function addRow() {
+function addRow2() {
 
     // La propiedad del producto -> Jalas el input
     var propiedad = document.getElementById("NomAtrib");
@@ -39,11 +86,11 @@ function addRow() {
     var valor="";
     if(RadioNumero===false)
     {
-        valor="Texto";
+        valor="VARCHAR";
     }
     else
     {
-        valor="Número";
+        valor="NUMERIC";
     }
 
 
@@ -64,8 +111,10 @@ function addRow() {
         // Reinicia el formulario, si tenes uno.
         document.getElementById("FormAgregarAtributo").reset();
 
+        console.log(col1);
+        console.log(col2);
+            
 
-        createJSON();
 
     }
 
@@ -101,19 +150,6 @@ function deleteRow(obj) {
 
     col1=col1Copia;
     col2=col2Copia;
-    createJSON();
 
 };
 
-function createJSON()
-{
-    var item = {};
-    for (var i = 0; i < col1.length; i+=1) 
-    {
-        item [col1[i]] = col2[i];
-        
-    }
-    
-    localStorage['CustomData']=JSON.stringify(item);
-    
-}

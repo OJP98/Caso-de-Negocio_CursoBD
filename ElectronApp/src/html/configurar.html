@@ -11,6 +11,8 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="../js/Fns2.js"></script>
+  <script src="../js/Fns.js"></script>
 
 </head>
 
@@ -19,8 +21,11 @@
   <!-- Barra de navegación -->
   <nav style="position:fixed; top: 0">
       <div class="nav-wrapper">
-          <a href="../html/index.html" class="brand-logo center" id="nombreDeLaTienda">Chicharrones</a>
-      </div>
+          <a href="../html/index.html" class="brand-logo center" id="nombreDeLaTienda"></a>
+          <ul class="left hide-on-med-and-down">
+              <li><a href="index.html"><i class="material-icons">keyboard_backspace</i></a></li>
+          </ul>
+        </div>
   </nav>
 
 
@@ -36,6 +41,7 @@
         <label for="first_name">Nombre de la tienda</label>
         </div>
         <a onclick="ingresarNombreTienda()" style="margin: 15px" class="waves-effect waves-light btn red lighten-1">Ingresar</a>
+        
         </div>
     </div>
 
@@ -45,6 +51,22 @@
 
     
     <div class="row">
+        <div class="row">
+        <div class="input-field">
+            <div class="col s12">
+                <input id="NomCat" list="categorias" placeholder="Seleccione una categoría" required>
+                <datalist id="categorias">
+                </datalist>
+            </div>
+
+
+            
+                
+            
+
+
+        </div>
+        </div>
 
       <form id="FormAgregarAtributo">
     <div class="input-field">
@@ -75,7 +97,8 @@
     </div>
   </form>
     </div>
-    <a onclick="addRow()" style="margin: 15px" class="waves-effect waves-light btn red lighten-1">Ingresar</a>
+    <a onclick="addRow2()" style="margin: 15px" class="waves-effect waves-light btn red lighten-1">Ingresar</a>
+    <a onclick="ingresarInformacion()" style="margin: 15px" class="waves-effect waves-light btn red lighten-1">Guardar</a>
     
     <br>
     <br>
@@ -113,7 +136,10 @@
 
   </div>
     <!-- Se importan las funciones en index -->
-    <script src="../js/Fns2.js"></script>
+   
+    <script>
+      getCategorias();
+    </script>
 
     
 
