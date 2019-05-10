@@ -1,3 +1,4 @@
+
 DROP TABLE IF EXISTS clientes CASCADE;
 CREATE TABLE clientes
 (
@@ -77,15 +78,31 @@ CREATE TABLE lineas_de_facturas
 	FOREIGN KEY (idProducto) REFERENCES productos (id)
 );
 
-DROP TABLE IF EXISTS d_date;
+DROP TABLE IF EXISTS d_date CASCADE;
 CREATE TABLE d_date
 (
   date_actual              DATE NOT NULL,
   week_of_year             INT NOT NULL,
   month_actual             INT NOT NULL,
   quarter_actual           INT NOT NULL,
-  year_actual              INT NOT NULL
+  year_actual              INT NOT NULL,
+  day_of_year              INT NOT NULL
 );
+
+INSERT INTO d_date
+SELECT datum AS date_actual,
+EXTRACT(week FROM datum) AS week_of_year,
+EXTRACT(MONTH FROM datum) AS month_actual,
+EXTRACT(quarter FROM datum) AS quarter_actual,
+EXTRACT(isoyear FROM datum) AS year_actual,
+EXTRACT(doy FROM datum) AS day_of_year
+		  
+FROM (SELECT '1970-01-01'::DATE+ SEQUENCE.DAY AS datum
+FROM GENERATE_SERIES (0,29219) AS SEQUENCE (DAY)
+GROUP BY SEQUENCE.DAY) DQ
+ORDER BY 1;
+
+SELECT * FROM d_date;
 
 DROP FUNCTION IF EXISTS updateSUMTotal;
 CREATE OR REPLACE FUNCTION updateSUMTotal() 
@@ -146,27 +163,15 @@ JOIN marcas as m ON m.id = p.idmarca
 GROUP BY fabricante;
 
 
-SELECT *
-FROM facturas as f
-JOIN lineas_de_facturas as lf ON f.id = lf.facturaId
-JOIN productos as p ON p.id = lf.idproducto
-JOIN categorias as c ON c.id = p.idcategoria
-JOIN marcas as m ON m.id = p.idmarca
-GROUP BY descripcion;
+-- SELECT *
+-- FROM facturas as f
+-- JOIN lineas_de_facturas as lf ON f.id = lf.facturaId
+-- JOIN productos as p ON p.id = lf.idproducto
+-- JOIN categorias as c ON c.id = p.idcategoria
+-- JOIN marcas as m ON m.id = p.idmarca
+-- GROUP BY descripcion;
 
--- INSERT INTO d_date
--- SELECT datum AS date_actual,
---        EXTRACT(week FROM datum) AS week_of_year,
---        EXTRACT(MONTH FROM datum) AS month_actual,
--- 		EXTRACT(quarter FROM datum) AS quarter_actual,
---        EXTRACT(isoyear FROM datum) AS year_actual
-						  
--- FROM (SELECT '1970-01-01'::DATE+ SEQUENCE.DAY AS datum
---       FROM GENERATE_SERIES (0,29219) AS SEQUENCE (DAY)
---       GROUP BY SEQUENCE.DAY) DQ
--- ORDER BY 1;
 
---SELECT * FROM d_date;
 
 INSERT INTO clientes(nombre, nit) VALUES('Javier Carpio', '577019-K');
 INSERT INTO clientes(nombre, nit) VALUES('Jose Cifuentes', '123456-K');
@@ -187,15 +192,16 @@ INSERT INTO productos(nombre, precio, idCategoria, idMarca) VALUES('Adizero', 85
 INSERT INTO facturas(clienteId, fecha, total, tienda) VALUES(1, '2015-05-05', NULL, 'Tienda A');
 SELECT checkId(1, 1, 5);
 
-INSERT INTO datos (atributo, tipo_dato, idcategoria) VALUES ('Talla', 'NUMERIC',2);
-INSERT INTO datos (atributo, tipo_dato, idcategoria) VALUES ('Color', 'VARCHAR',2);
-INSERT INTO datos (atributo, tipo_dato, idcategoria) VALUES ('Material', 'VARCHAR',2);
+INSERT INTO datos (atributo, tipo_dato, idcategoria) VALUES ('Talla', 'NUMERIC',5);
+INSERT INTO datos (atributo, tipo_dato, idcategoria) VALUES ('Color', 'VARCHAR',5);
+INSERT INTO datos (atributo, tipo_dato, idcategoria) VALUES ('Material', 'VARCHAR',5);
 
--- SELECT * FROM clientes;
--- SELECT * FROM categorias;
--- SELECT * FROM productos;
+SELECT * FROM clientes;
+SELECT * FROM categorias;
+SELECT * FROM productos;
 SELECT * FROM facturas ORDER BY id;
-SELECT * FROM lineas_de_facturas WHERE facturaid = 6;
--- SELECT * FROM productos;
--- SELECT * FROM datos;
--- SELECT * FROM custom;
+SELECT * FROM lineas_de_facturas;
+SELECT * FROM productos;
+SELECT * FROM datos;
+SELECT * FROM custom;
+

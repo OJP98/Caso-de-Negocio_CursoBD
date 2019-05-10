@@ -4,7 +4,6 @@ var config = {
     user: 'postgres',
     password: 'Javiercarpio1',
     database: 'proyecto2DB'
-    
 };
 
 var Pool = new Pool(config);
@@ -83,6 +82,13 @@ async function graficar(){
         var query = 'SELECT quarter_actual as "titulo", SUM(total) as "suma" FROM facturas as f JOIN d_date as d ON f.fecha = d.date_actual GROUP BY quarter_actual;';
         var response = await Pool.query(query);
         textos = 'Ventas por trimestre';
+    }else if(variable == 'diames'){
+        var today = new Date();
+        var month = today.getMonth() + 1;
+        console.log(month);
+        var query = 'SELECT day_of_month as "titulo", SUM(total) as "suma" FROM facturas AS f JOIN d_date AS d ON f.fecha = d.date_actual WHERE month_actual = ' + month + 'GROUP BY day_of_month;';
+        var response = await Pool.query(query);
+        textos = 'Ventas por dia de mes actual';
     }
 
     if(variable == 'cliente' || variable == 'marca' || variable == 'categoria' || variable == 'producto'){
@@ -115,7 +121,7 @@ async function graficar(){
                 }
             }
         });
-    }else if(variable == 'anio' || variable == 'mes' || variable == 'trimestre'){
+    }else if(variable == 'anio' || variable == 'mes' || variable == 'trimestre' || variable == 'diames'){
         if(grafica == 'bar' || grafica == 'horizontalBar' || grafica == 'pie'){
             for(var i = 0; i < response.rows.length; i++){
                 titulos.push(response.rows[i].titulo);
@@ -147,6 +153,7 @@ async function graficar(){
                 }
             });
         }else{
+            console.log('Grafica por ano');
             for(var i = 0; i < response.rows.length; i++){
                 titulos.push(response.rows[i].titulo);
                 datos.push(response.rows[i].suma);

@@ -84,7 +84,7 @@ async function crearFacturas() {
                     var tipoTienda = tiendas[getRandom(0, tiendas.length - 1)];
                     // console.log(tipoTienda);
                     var query = "INSERT INTO facturas(clienteId, fecha, total, tienda) VALUES(" + idCliente + ", '" + ano + "-" + mes + "-" + dia + "', NULL, '" + tipoTienda +"');";
-                    // console.log("Factura: " + query);
+                    console.log("Factura: " + query);
                     var response = await Pool.query(query);
                 }
     
@@ -105,7 +105,7 @@ async function crearFacturas() {
                 var cantidad = getRandom(1, 10);
     
                 var query = "SELECT checkId(" + idFactura + ", " + idProducto + ", " + cantidad + ");";
-                // console.log("Linea de factura: " + query);
+                console.log("Linea de factura: " + query);
                 var response = await Pool.query(query);
             }
         } catch(e){
