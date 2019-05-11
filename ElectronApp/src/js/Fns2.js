@@ -2,7 +2,7 @@ var Pool = require('pg').Pool;
 
 var config = {
     user: 'postgres',
-    password: 'jeje',
+    password: 'karate16',
     database: 'proyecto2DB'
     
 };
@@ -35,6 +35,7 @@ var col2=[];
 
 async function ingresarInformacion()
 {
+    M.toast({ html: 'Atributos agregados a categoría', classes: 'rounded' });
     var categoria=document.getElementById("NomCat").value;
     console.log(categoria);
 
@@ -67,6 +68,9 @@ async function ingresarInformacion()
         var response = await Pool.query(query3);
 
     }
+    document.getElementById("todo").reset();
+    document.getElementById("Tabla").reset();
+    
       
 
 }
@@ -95,15 +99,16 @@ function addRow2() {
 
 
     if (propiedad.value == "") {
-        window.alert("Verifique que todos los campos sean válidos");
+        M.toast({ html: 'Verifique que todos los campos sean válidos', classes: 'rounded' });
     } else {
 
+        M.toast({ html: 'Atributo agregado correctamente', classes: 'rounded' });
         var rowCount = tabla.rows.length;
         var row = tabla.insertRow(rowCount);
 
         row.insertCell(0).innerHTML = propiedad.value;
         row.insertCell(1).innerHTML = valor;
-        row.insertCell(2).innerHTML = '<a  style="margin: 5px" class="waves-effect waves-light btn-small" onClick="Javacsript:deleteRow(this)"><i class="material-icons">delete</a>';
+        row.insertCell(2).innerHTML = '<a  style="margin: 5px" class="waves-effect waves-light btn-small" onClick="Javacsript:deleteRow2(this)"><i class="material-icons">delete</a>';
 
         col1.push(propiedad.value);
         col2.push(valor);
@@ -120,8 +125,9 @@ function addRow2() {
 
 };
 
-function deleteRow(obj) {
+function deleteRow2(obj) {
 
+    M.toast({ html: 'Atributo eliminado correctamente', classes: 'rounded' });
     var index = obj.parentNode.parentNode.rowIndex;
     var table = document.getElementById("tabla");
     table.deleteRow(index);

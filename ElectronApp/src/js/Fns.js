@@ -11,7 +11,7 @@ var idCategoria = 1,
     newDivId = 1;
 
 var atributos = []
-
+/*
 var config = {
     user: 'postgres',
     database: 'proyecto2',
@@ -19,14 +19,14 @@ var config = {
     host: '127.0.0.1',
     port: 5432,
     max: 10,
-};
+};*/
 
-// var config = {
-//     user: 'postgres',
-//     password: 'Javiercarpio1',
-//     database: 'proyecto2DB'
+ var config = {
+     user: 'postgres',
+     password: 'karate16',
+     database: 'proyecto2DB'
 
-// };
+ };
 
 var Pool = new Pool(config);
 

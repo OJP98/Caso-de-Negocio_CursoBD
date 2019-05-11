@@ -6,7 +6,7 @@ var meses = ['Jan', 'Feb', 'Mar', 'Apr', 'May', "Jun", 'Jul', 'Aug', 'Sep', 'Oct
 
 var config = {
     user: 'postgres',
-    password: 'Javiercarpio1',
+    password: 'karate16',
     database: 'proyecto2DB'
     
 };
