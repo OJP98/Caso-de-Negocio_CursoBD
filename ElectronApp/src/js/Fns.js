@@ -1,6 +1,7 @@
 var $ = require('jQuery');
 var Pool = require('pg').Pool;
 var prodsWindow = false;
+var nombreTienda = 'Tienda A';
 
 const {
     ipcRenderer
@@ -11,7 +12,7 @@ var idCategoria = 1,
     newDivId = 1;
 
 var atributos = []
-/*
+
 var config = {
     user: 'postgres',
     database: 'proyecto2',
@@ -19,14 +20,14 @@ var config = {
     host: '127.0.0.1',
     port: 5432,
     max: 10,
-};*/
+};
 
- var config = {
-     user: 'postgres',
-     password: 'karate16',
-     database: 'proyecto2DB'
+// var config = {
+//     user: 'postgres',
+//     password: 'karate16',
+//     database: 'proyecto2DB'
 
- };
+// };
 
 var Pool = new Pool(config);
 
@@ -116,7 +117,10 @@ async function validarNIT() {
         }
     } else {
         if (nit.length != 0) {
-            M.toast({ html: 'NIT invalido', classes: 'rounded' });
+            M.toast({
+                html: 'NIT invalido',
+                classes: 'rounded'
+            });
         }
     }
 }
@@ -130,7 +134,10 @@ async function guardarUsuario() {
         var response = await Pool.query(query);
         var divNombre = document.getElementById('nuevo');
         divNombre.style.display = 'none';
-        M.toast({ html: '¡Usuario creado!', classes: 'rounded' });
+        M.toast({
+            html: '¡Usuario creado!',
+            classes: 'rounded'
+        });
 
     }
 }
@@ -319,7 +326,7 @@ function addProductRow() {
     newDivId += 1;
 
     // Se selecciona el div de los productos
-    var productosDiv = document.getElementById("productos");
+    var productosDiv = document.getElementById("formProductos");
 
     // Se crean elementos tipo div
     var div1 = document.createElement('div');
@@ -350,14 +357,14 @@ function addProductRow() {
 function removeProductRow() {
 
     // Se selecciona el div de productos
-    var div = $('#productos').children().last();
+    var div = $('#formProductos').children().last();
 
     // Se verifica que aún haya algo que eliminar
     if (div.length > 0) {
 
         // Se eliminar los campos y se resta uno a la cantidad de campos
-        $('#productos').children().last().remove();
-        $('#productos').children().last().remove();
+        $('#formProductos').children().last().remove();
+        $('#formProductos').children().last().remove();
         newDivId -= 1;
 
         // Por alguna razón, al usar este else, truena :(
@@ -416,4 +423,125 @@ async function getProducts() {
         alert("Error", e);
     }
 
+}
+
+function hacerVenta() {
+
+    // Obtener elementos del html
+    var clienteNIT = document.getElementById('nitInput').value;
+    var form = document.getElementById('formProductos');
+    var div = document.getElementById('productos');
+
+    var cantProductos = div.children.length / 2
+
+    // Se crea una nueva factura
+    nuevaFactura(clienteNIT).then(function () {
+
+        // Se obtiene el id de la última factura creada
+        var idFactura = getNuevaFacturaId();
+
+        return (idFactura);
+
+    }).then(function (idFactura) {
+
+        var cantProductos = document.getElementById('formProductos').children.length / 2;
+
+        // Se hace un for con la cantidad de productos ingresados
+        for (let i = 1; i <= cantProductos; i++) {
+
+            // Se obtiene el valor de cada input
+            var prodId = document.getElementById("idProd" + i).value;
+            var prodCant = document.getElementById("cantProd" + i).value;
+
+
+            // Validación de campos
+            if (prodId == "" || prodCant == "") {
+                alert("Por favor llene todos los campos");
+                break;
+            }
+
+
+            venderProducto(prodId, prodCant, idFactura);
+        }
+    }).then(function () {
+
+        M.toast({
+            html: 'Compra realizada con éxito!',
+            classes: 'rounded'
+        });
+
+        form.reset();
+    });
+
+
+
+    // for (let j = cantProductos; j > 0; j--) {
+    //     form.removeChild(form.lastChild);
+    // }
+
+}
+
+// Función que crea una nueva factura y retorna el NIT del cliente que la hizo
+async function nuevaFactura(clienteNIT) {
+
+    // Query para obtener el ID del cliente
+    var clienteIdQuery = `SELECT id FROM clientes WHERE nit = '${clienteNIT}';`
+
+    try {
+        // Se obtiene el ID del cliente
+        var response = await Pool.query(clienteIdQuery);
+        var clienteId = response.rows[0]["id"];
+
+    } catch (e) {
+        alert("Error", e);
+        return true;
+    }
+
+    // Se obtiene la fecha de hoy para hacer la compra
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+    today = yyyy + '-' + mm + '-' + dd;
+
+    // Query para instertar una nueva factura
+    var queryFactura = `INSERT INTO facturas(clienteid, fecha, total, tienda) VALUES (${clienteId}, '${today}', null, '${nombreTienda}');`;
+
+    try {
+        // Se postea la nueva factura en la base de datos
+        await Pool.query(queryFactura);
+
+    } catch (e) {
+        alert("Error", e);
+        return true;
+    }
+
+    return clienteId;
+
+}
+
+async function getNuevaFacturaId() {
+    var query = 'SELECT max(id) FROM facturas;'
+
+    try {
+        var response = await Pool.query(query);
+        var facturaid = response.rows[0]["max"];
+        return (facturaid)
+
+    } catch (e) {
+        alert("Error", e);
+        return true;
+    }
+}
+
+async function venderProducto(prodId, prodCant, idFactura) {
+
+    var insertarLinea = `INSERT INTO lineas_de_facturas  (facturaid, idproducto, cantidad) VALUES (${idFactura}, ${prodId}, ${prodCant});`
+
+    try {
+        await Pool.query(insertarLinea);
+
+    } catch (e) {
+        alert("Error", e);
+    }
 }

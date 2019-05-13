@@ -63,7 +63,8 @@
 
                 <!-- Boton para validación del NIT -->
                 <div class="col s4">
-                    <a id="guardarUsuario" style="margin: 15px" class="waves-effect waves-light btn" onclick="guardarUsuario()">
+                    <a id="guardarUsuario" style="margin: 15px" class="waves-effect waves-light btn"
+                        onclick="guardarUsuario()">
                         <i class="material-icons right">person_add</i>Guardar usuario</a>
                 </div>
             </form>
@@ -79,19 +80,22 @@
 
         <div id="productos" class="row">
 
-            <!-- Campo para adquirir un producto -->
-            <div class="input-field col s3 offset-s3">
-                <input id="idProd1" type="text" class="validate" value="" required>
-                <label for="idProd1">ID del producto</label>
-                <!-- <span class="helper-text" data-error="Por favor complete el campo"></span> -->
-            </div>
+            <form id="formProductos">
 
-            <!-- Campo para ingresar cantidad del producto -->
-            <div class="input-field col s3">
-                <input id="cantProd1" type="number" class="validate" value="" max="10" min="0" required>
-                <label for="cantProd1">Cantidad</label>
-                <!-- <span class="helper-text" data-error="Por favor complete el campo"></span> -->
-            </div>
+                <!-- Campo para adquirir un producto -->
+                <div class="input-field col s3 offset-s3">
+                    <input id="idProd1" type="text" class="validate" value="" required>
+                    <label for="idProd1">ID del producto</label>
+                    <!-- <span class="helper-text" data-error="Por favor complete el campo"></span> -->
+                </div>
+
+                <!-- Campo para ingresar cantidad del producto -->
+                <div class="input-field col s3">
+                    <input id="cantProd1" type="number" class="validate" value="" max="10" min="0" required>
+                    <label for="cantProd1">Cantidad</label>
+                    <!-- <span class="helper-text" data-error="Por favor complete el campo"></span> -->
+                </div>
+            </form>
         </div>
 
     </div>
@@ -125,14 +129,14 @@
     <script>
         document.getElementById("nombreDeLaTienda").innerHTML = localStorage['NombreTienda'] || 'Nombre de la tienda';
 
-        $(document).ready(function() {
+        $(document).ready(function () {
 
-            $('#cancelarBtn').click(function() {
+            $('#cancelarBtn').click(function () {
                 window.history.back();
             });
 
-            $('#validarBtn').click(function() {
-                // PROGRAMAR FUNCION DE VALIDAR AQUÍ;
+            $('#comprarBtn').click(function () {
+                hacerVenta();
             });
 
         });
