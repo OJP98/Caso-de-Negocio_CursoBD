@@ -1,5 +1,6 @@
 const electron = require('electron');
 
+
 const {
     app,
     BrowserWindow,
@@ -54,6 +55,28 @@ function createProductsWindow() {
 
 }
 
+function createProductsWindow2() {
+    // Create the browser window.
+    let prodsAtrib = new BrowserWindow({
+        width: 600,
+        height: 600,
+        titleBarStyle: 'customButtonsOnHover',
+        frame: false,
+        webPreferences: {
+            nodeIntegration: true
+        }
+    });
+
+    // and load the index.html of the app.
+    prodsAtrib.loadFile('./src/html/datosProducto.html');
+
+    // Emitted when the window is closed.
+    prodsAtrib.on('closed', () => {
+        prodsAtrib = null;
+    })
+
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -80,4 +103,10 @@ app.on('activate', () => {
 
 ipcMain.on('show-products', function() {
     createProductsWindow();
+});
+
+ipcMain.on('show-products2', function()  
+{
+    createProductsWindow2();
+    
 });

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Datos del head -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Agregar Producto</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    
+    <script src="../js/Fns.js"></script>
+
+</head>
+
+<body style="margin-top: 20px; -webkit-app-region: drag">
+
+    <!-- Titulo de la vista -->
+    <h4 class="center" id="Titulo">Tabla de hola hola</h4>
+
+    <br>
+
+    <!-- Container de la tabla -->
+    <div class="container">
+
+        <!-- Apartado de la tabla -->
+        <table id="tablaProductos" class="highlight" cellpadding="0">
+                <thead>
+                    <tr>
+                        <th width="50%"><b>Atributo</b></th>
+                        <th width="50%"><b>Valor</b></th>
+                    </tr>
+                </thead>
+                <tbody id="productosBody">
+                </tbody>
+            </table>
+
+    
+    </div>
+
+    <br>
+    <!-- Botones para agregar o eliminar último productos -->
+    <div class="row center">
+        <a style="margin: 5px" class="waves-effect waves-light btn" onclick="exitApplication()">
+            <i class="material-icons left">exit_to_app</i>Cerrar</a>
+    </div>
+
+    <br>
+
+    <!-- SCRIPTS -->
+    <script>
+        window.$ = window.jQuery = require("jquery");
+        getAtributos();
+
+    </script>
+
+
+
+
+</body>
+
+</html>

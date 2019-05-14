@@ -12,7 +12,7 @@ var idCategoria = 1,
     newDivId = 1;
 
 var atributos = []
-
+/*
 var config = {
     user: 'postgres',
     database: 'proyecto2',
@@ -21,13 +21,14 @@ var config = {
     port: 5432,
     max: 10,
 };
+*/
 
-// var config = {
-//     user: 'postgres',
-//     password: 'karate16',
-//     database: 'proyecto2DB'
+ var config = {
+     user: 'postgres',
+     password: 'karate16',
+     database: 'proyecto2DB'
 
-// };
+ };
 
 var Pool = new Pool(config);
 
@@ -49,6 +50,47 @@ function deleteRow(obj) {
     var index = obj.parentNode.parentNode.rowIndex;
     var table = document.getElementById("tablaProductos");
     table.deleteRow(index);
+
+};
+
+async function getAtributos()
+{
+    console.log(localStorage['id']);
+    var id=localStorage['id'];
+    var query =
+        'select p.nombre,p.precio,ca.descripcion, m.fabricante\
+        from "productos" p,"categorias" ca, "marcas" m\
+        where p.idcategoria=ca.id and m.id=p.idmarca and p.id='+id+';'
+
+        var response = await Pool.query(query);
+
+        var tabla = document.getElementById('tablaProductos');
+
+        for (var i = 0; i < response.fields.length; i++) 
+        {
+            var row = tabla.insertRow(-1);
+            row.insertCell(0).innerHTML = response.fields[i].name;
+            row.insertCell(1).innerHTML = response.rows[0][response.fields[i].name];
+        }
+
+        query ='select atributo,valor from custom where idproducto='+id+';'
+
+        response = await Pool.query(query);
+
+        for (var i = 0; i < response.rows.length; i++) 
+        {
+            var row = tabla.insertRow(-1);
+            row.insertCell(0).innerHTML = response.rows[i]['atributo'];
+            row.insertCell(1).innerHTML = response.rows[i]['valor'];
+        }
+        
+
+
+    
+
+
+    
+    
 
 };
 
@@ -141,6 +183,8 @@ async function guardarUsuario() {
 
     }
 }
+
+
 
 async function getAttributes() {
 

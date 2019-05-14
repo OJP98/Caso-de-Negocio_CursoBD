@@ -7,6 +7,10 @@ var config = {
     
 };
 
+const {
+    ipcRenderer
+} = require('electron');
+
 var Pool = new Pool(config);
 
 
@@ -17,6 +21,59 @@ function iniciar()
     console.log(localStorage['CustomData']);
     document.getElementById("nombreDeLaTienda").innerHTML=localStorage['NombreTienda']|| 'Nombre de la tienda';
 }
+
+// Obitiene e inserta los productos en la tabla de productos
+async function getProducts2() 
+{
+    
+
+    var query =
+        'SELECT p.id, m.fabricante, p.nombre, p.precio\
+    FROM productos p INNER JOIN marcas m ON m.id = p.idmarca\
+    INNER JOIN categorias c ON c.id = p.idcategoria\
+    ORDER BY c.descripcion;'
+
+    var tabla = document.getElementById('tablaProductos');
+
+    // Se ejecuta el query
+    try {
+        var response = await Pool.query(query);
+
+        // Se recorre la respuesta del query y se añaden los productos a la tabla
+        for (var i = 0; i < response.rows.length; i++) {
+
+            // Se crea un diccionario por fila
+            var dict = response.rows[i]
+
+            // Se inserta en la última posición de la tabla
+            var row = tabla.insertRow(-1);
+
+            // Se insertan los valores por columna
+            row.insertCell(0).innerHTML = dict["id"];
+            row.insertCell(1).innerHTML = dict["fabricante"];
+            row.insertCell(2).innerHTML = dict["nombre"];
+            row.insertCell(3).innerHTML = dict["precio"];
+            row.insertCell(4).innerHTML = '<a  style="margin: 5px" class="waves-effect waves-light btn-small" onClick="Javacsript:verMas(this)"><i class="material-icons">info_outline</a>';
+        }
+    } catch (e) {
+        alert("Error", e);
+    }
+
+}
+
+function verMas(obj) 
+{
+
+    var index = obj.parentNode.parentNode.rowIndex;
+    var table = document.getElementById("tablaProductos");
+
+    var id=table.rows[index].getElementsByTagName("td")[0].innerHTML;
+
+    localStorage['id']=id;
+    ipcRenderer.send('show-products2');     
+};
+
+
 
 
 function ingresarNombreTienda()
