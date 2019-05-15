@@ -432,6 +432,11 @@ function exitApplication() {
     win.close();
 
 }
+function iniciar() 
+{
+    console.log(localStorage['CustomData']);
+    document.getElementById("nombreDeLaTienda").innerHTML=localStorage['NombreTienda']|| 'Nombre de la tienda';
+}
 
 // Obitiene e inserta los productos en la tabla de productos
 async function getProducts() {
