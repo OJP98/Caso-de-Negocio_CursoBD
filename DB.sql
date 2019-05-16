@@ -86,7 +86,8 @@ CREATE TABLE d_date
   month_actual             INT NOT NULL,
   quarter_actual           INT NOT NULL,
   year_actual              INT NOT NULL,
-  day_of_year              INT NOT NULL
+  day_of_year              INT NOT NULL,
+  day_of_month             INT NOT NULL
 );
 
 INSERT INTO d_date
@@ -95,7 +96,8 @@ EXTRACT(week FROM datum) AS week_of_year,
 EXTRACT(MONTH FROM datum) AS month_actual,
 EXTRACT(quarter FROM datum) AS quarter_actual,
 EXTRACT(isoyear FROM datum) AS year_actual,
-EXTRACT(doy FROM datum) AS day_of_year
+EXTRACT(doy FROM datum) AS day_of_year,
+EXTRACT(DAY FROM datum) AS day_of_month
 		  
 FROM (SELECT '1970-01-01'::DATE+ SEQUENCE.DAY AS datum
 FROM GENERATE_SERIES (0,29219) AS SEQUENCE (DAY)
