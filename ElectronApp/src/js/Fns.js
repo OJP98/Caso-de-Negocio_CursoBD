@@ -605,6 +605,8 @@ async function venderProducto(prodId, prodCant, idFactura) {
     }
 }
 
+
+
 function getCollection() {
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
@@ -623,15 +625,17 @@ function pruebas() {
 
     var dict = {};
 
+    // Se crea el diccionario con llave: dpi, value: cant. de compras
     mongoArray.forEach(item => {
-        var dpi = item.nombre;
+        var dpi = item.dpi;
         dict[dpi] == null ? dict[dpi] = 1 : dict[dpi] += 1;
     });
 
-    var sortedList = sort_object(dict);
+    // Se ordena el diccionario, se mete a un array y se manda el dpi del mejor cliente
+    var sortedList = sort_object(dict),
+        dpiCliente1 = sortedList[0][0];
 
-    console.log(sortedList);
-    // console.log(sortedList[0], sortedList[1], sortedList[2], sortedList[3], sortedList[4]);
+    getByDPI(dpiCliente1);
 
 }
 
@@ -656,4 +660,31 @@ function sort_object(obj) {
     // return (sorted_obj)
 
     return items;
+}
+
+
+function getByDPI(dpi) {
+
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        var dbo = db.db("lab15DB");
+
+        // El "where" para el query
+        var query = {
+            dpi: dpi
+        };
+
+        // Los datos a elegir
+        var projection = {
+            _id: 0,
+            nombre: 1
+        }
+
+        // Se obtiene la primera instancia
+        dbo.collection("productos").findOne(query, projection, function(err, result) {
+            if (err) throw err;
+            console.log("El mejor cliente es:", result.nombre);
+            db.close();
+        });
+    });
 }
