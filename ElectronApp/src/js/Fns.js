@@ -1,7 +1,19 @@
 var $ = require('jQuery');
 var Pool = require('pg').Pool;
+var mongo = require('mongodb');
+var Db = require('mongodb').Db;
+var assert = require('assert');
+var Server = require('mongodb').Server;
+
+var mongoArray = [];
+
+
 var prodsWindow = false;
 var nombreTienda = 'Tienda A';
+
+// Adiciones de mongo
+var MongoClient = mongo.MongoClient;
+var url = 'mongodb://localhost:27017/lab15DB';
 
 const {
     ipcRenderer
@@ -12,23 +24,22 @@ var idCategoria = 1,
     newDivId = 1;
 
 var atributos = []
-/*
+
 var config = {
     user: 'postgres',
     database: 'proyecto2',
-    password: 'postgres',
+    password: 'Juarez1998',
     host: '127.0.0.1',
     port: 5432,
     max: 10,
 };
-*/
 
- var config = {
-     user: 'postgres',
-     password: 'karate16',
-     database: 'proyecto2DB'
+// var config = {
+//     user: 'postgres',
+//     password: 'karate16',
+//     database: 'proyecto2DB'
 
- };
+// };
 
 var Pool = new Pool(config);
 
@@ -53,44 +64,41 @@ function deleteRow(obj) {
 
 };
 
-async function getAtributos()
-{
+async function getAtributos() {
     console.log(localStorage['id']);
-    var id=localStorage['id'];
+    var id = localStorage['id'];
     var query =
         'select p.nombre,p.precio,ca.descripcion, m.fabricante\
         from "productos" p,"categorias" ca, "marcas" m\
-        where p.idcategoria=ca.id and m.id=p.idmarca and p.id='+id+';'
+        where p.idcategoria=ca.id and m.id=p.idmarca and p.id=' + id + ';'
 
-        var response = await Pool.query(query);
+    var response = await Pool.query(query);
 
-        var tabla = document.getElementById('tablaProductos');
+    var tabla = document.getElementById('tablaProductos');
 
-        for (var i = 0; i < response.fields.length; i++) 
-        {
-            var row = tabla.insertRow(-1);
-            row.insertCell(0).innerHTML = response.fields[i].name;
-            row.insertCell(1).innerHTML = response.rows[0][response.fields[i].name];
-        }
+    for (var i = 0; i < response.fields.length; i++) {
+        var row = tabla.insertRow(-1);
+        row.insertCell(0).innerHTML = response.fields[i].name;
+        row.insertCell(1).innerHTML = response.rows[0][response.fields[i].name];
+    }
 
-        query ='select atributo,valor from custom where idproducto='+id+';'
+    query = 'select atributo,valor from custom where idproducto=' + id + ';'
 
-        response = await Pool.query(query);
+    response = await Pool.query(query);
 
-        for (var i = 0; i < response.rows.length; i++) 
-        {
-            var row = tabla.insertRow(-1);
-            row.insertCell(0).innerHTML = response.rows[i]['atributo'];
-            row.insertCell(1).innerHTML = response.rows[i]['valor'];
-        }
-        
+    for (var i = 0; i < response.rows.length; i++) {
+        var row = tabla.insertRow(-1);
+        row.insertCell(0).innerHTML = response.rows[i]['atributo'];
+        row.insertCell(1).innerHTML = response.rows[i]['valor'];
+    }
 
 
-    
 
 
-    
-    
+
+
+
+
 
 };
 
@@ -213,8 +221,10 @@ async function getAttributes() {
     }
 
     try {
+
         // Se seleccionan los atributos en base al id de la categoría
         var response = await Pool.query(`SELECT atributo, tipo_dato FROM datos WHERE idCategoria = ${idCategoria}`);
+
 
         // Por cada dato en la respuesta
         for (var i = 0; i < response.rows.length; i++) {
@@ -432,10 +442,10 @@ function exitApplication() {
     win.close();
 
 }
-function iniciar() 
-{
+
+function iniciar() {
     console.log(localStorage['CustomData']);
-    document.getElementById("nombreDeLaTienda").innerHTML=localStorage['NombreTienda']|| 'Nombre de la tienda';
+    document.getElementById("nombreDeLaTienda").innerHTML = localStorage['NombreTienda'] || 'Nombre de la tienda';
 }
 
 // Obitiene e inserta los productos en la tabla de productos
@@ -484,14 +494,14 @@ function hacerVenta() {
     var cantProductos = div.children.length / 2
 
     // Se crea una nueva factura
-    nuevaFactura(clienteNIT).then(function () {
+    nuevaFactura(clienteNIT).then(function() {
 
         // Se obtiene el id de la última factura creada
         var idFactura = getNuevaFacturaId();
 
         return (idFactura);
 
-    }).then(function (idFactura) {
+    }).then(function(idFactura) {
 
         var cantProductos = document.getElementById('formProductos').children.length / 2;
 
@@ -512,7 +522,7 @@ function hacerVenta() {
 
             venderProducto(prodId, prodCant, idFactura);
         }
-    }).then(function () {
+    }).then(function() {
 
         M.toast({
             html: 'Compra realizada con éxito!',
@@ -593,4 +603,88 @@ async function venderProducto(prodId, prodCant, idFactura) {
     } catch (e) {
         alert("Error", e);
     }
+}
+
+
+
+function getCollection() {
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        var dbo = db.db("lab15DB");
+        dbo.collection("productos").find({}).toArray(function(err, result) {
+            if (err) throw err;
+            mongoArray = result;
+            console.log("Get finished");
+            db.close();
+        });
+    });
+}
+
+
+function pruebas() {
+
+    var dict = {};
+
+    // Se crea el diccionario con llave: dpi, value: cant. de compras
+    mongoArray.forEach(item => {
+        var dpi = item.dpi;
+        dict[dpi] == null ? dict[dpi] = 1 : dict[dpi] += 1;
+    });
+
+    // Se ordena el diccionario, se mete a un array y se manda el dpi del mejor cliente
+    var sortedList = sort_object(dict),
+        dpiCliente1 = sortedList[0][0];
+
+    getByDPI(dpiCliente1);
+
+}
+
+
+function sort_object(obj) {
+    items = Object.keys(obj).map(function(key) {
+        return [key, obj[key]];
+    });
+
+    items.sort(function(first, second) {
+        return second[1] - first[1];
+    });
+
+    // SI SE QUIERE RETORNAR COMO DICCIONARIO, DESCOMENTAR EL SIGUIENTE CÓDIGO
+
+    // sorted_obj = {}
+    // $.each(items, function(k, v) {
+    //     use_key = v[0]
+    //     use_value = v[1]
+    //     sorted_obj[use_key] = use_value
+    // })
+    // return (sorted_obj)
+
+    return items;
+}
+
+
+function getByDPI(dpi) {
+
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        var dbo = db.db("lab15DB");
+
+        // El "where" para el query
+        var query = {
+            dpi: dpi
+        };
+
+        // Los datos a elegir
+        var projection = {
+            _id: 0,
+            nombre: 1
+        }
+
+        // Se obtiene la primera instancia
+        dbo.collection("productos").findOne(query, projection, function(err, result) {
+            if (err) throw err;
+            console.log("El mejor cliente es:", result.nombre);
+            db.close();
+        });
+    });
 }

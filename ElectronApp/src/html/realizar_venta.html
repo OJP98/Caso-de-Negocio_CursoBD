@@ -63,8 +63,7 @@
 
                 <!-- Boton para validación del NIT -->
                 <div class="col s4">
-                    <a id="guardarUsuario" style="margin: 15px" class="waves-effect waves-light btn"
-                        onclick="guardarUsuario()">
+                    <a id="guardarUsuario" style="margin: 15px" class="waves-effect waves-light btn" onclick="guardarUsuario()">
                         <i class="material-icons right">person_add</i>Guardar usuario</a>
                 </div>
             </form>
@@ -129,13 +128,13 @@
     <script>
         document.getElementById("nombreDeLaTienda").innerHTML = localStorage['NombreTienda'] || 'Nombre de la tienda';
 
-        $(document).ready(function () {
+        $(document).ready(function() {
 
-            $('#cancelarBtn').click(function () {
+            $('#cancelarBtn').click(function() {
                 window.history.back();
             });
 
-            $('#comprarBtn').click(function () {
+            $('#comprarBtn').click(function() {
                 hacerVenta();
             });
 

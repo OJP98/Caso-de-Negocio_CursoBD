@@ -2,30 +2,25 @@ var Pool = require('pg').Pool;
 
 var config = {
     user: 'postgres',
-    password: 'karate16',
-    database: 'proyecto2DB'
-    
+    database: 'proyecto2',
+    password: 'Juarez1998',
+    host: '127.0.0.1',
+    port: 5432,
+    max: 10,
 };
-
-const {
-    ipcRenderer
-} = require('electron');
-
 var Pool = new Pool(config);
 
 
 
 
-function iniciar() 
-{
+function iniciar() {
     console.log(localStorage['CustomData']);
-    document.getElementById("nombreDeLaTienda").innerHTML=localStorage['NombreTienda']|| 'Nombre de la tienda';
+    document.getElementById("nombreDeLaTienda").innerHTML = localStorage['NombreTienda'] || 'Nombre de la tienda';
 }
 
 // Obitiene e inserta los productos en la tabla de productos
-async function getProducts2() 
-{
-    
+async function getProducts2() {
+
 
     var query =
         'SELECT p.id, m.fabricante, p.nombre, p.precio\
@@ -61,74 +56,67 @@ async function getProducts2()
 
 }
 
-function verMas(obj) 
-{
+function verMas(obj) {
 
     var index = obj.parentNode.parentNode.rowIndex;
     var table = document.getElementById("tablaProductos");
 
-    var id=table.rows[index].getElementsByTagName("td")[0].innerHTML;
+    var id = table.rows[index].getElementsByTagName("td")[0].innerHTML;
 
-    localStorage['id']=id;
-    ipcRenderer.send('show-products2');     
+    localStorage['id'] = id;
+    ipcRenderer.send('show-products2');
 };
 
 
 
 
-function ingresarNombreTienda()
-{
+function ingresarNombreTienda() {
     console.log("Nombre de tienda");
-    var nombre=document.getElementById("nombreTienda").value;
-    localStorage['NombreTienda']=nombre;
+    var nombre = document.getElementById("nombreTienda").value;
+    localStorage['NombreTienda'] = nombre;
 
-    document.getElementById("nombreDeLaTienda").innerHTML=localStorage['NombreTienda']|| 'Nombre de la tienda';
+    document.getElementById("nombreDeLaTienda").innerHTML = localStorage['NombreTienda'] || 'Nombre de la tienda';
 
 }
 
-var col1=[];
-var col2=[];
+var col1 = [];
+var col2 = [];
 
 
-async function ingresarInformacion()
-{
+async function ingresarInformacion() {
     M.toast({ html: 'Atributos agregados a categoría', classes: 'rounded' });
-    var categoria=document.getElementById("NomCat").value;
+    var categoria = document.getElementById("NomCat").value;
     console.log(categoria);
 
-    var query = "select * from categorias  where descripcion LIKE '"+categoria+"'"+";";
+    var query = "select * from categorias  where descripcion LIKE '" + categoria + "'" + ";";
     var response = await Pool.query(query);
     var id;
 
-    if(response.rowCount===0)
-    {
-        var query = "INSERT INTO categorias(descripcion) VALUES('"+categoria+"');";
+    if (response.rowCount === 0) {
+        var query = "INSERT INTO categorias(descripcion) VALUES('" + categoria + "');";
         var response = await Pool.query(query);
         console.log(response);
 
         var query2 = "select max(id) from categorias";
         var response = await Pool.query(query2);
-        id=response.rows[0].max;
+        id = response.rows[0].max;
         console.log(id);
-    }
-    else
-    {
-        var query = "select id from categorias where descripcion LIKE '"+categoria+"';";
+    } else {
+        var query = "select id from categorias where descripcion LIKE '" + categoria + "';";
         var response = await Pool.query(query);
-        id=response.rows[0].id;
+        id = response.rows[0].id;
     }
-    
 
-    for (var i = 0; i < col1.length; i+=1) 
-    {
+
+    for (var i = 0; i < col1.length; i += 1) {
         var query3 = `INSERT INTO datos (atributo, tipo_dato, idcategoria) VALUES ('${col1[i]}','${col2[i]}','${id}');`;
         var response = await Pool.query(query3);
 
     }
     document.getElementById("todo").reset();
     document.getElementById("Tabla").reset();
-    
-      
+
+
 
 }
 
@@ -142,16 +130,13 @@ function addRow2() {
     // Se refiere a la tabla del html
     var tabla = document.getElementById("tabla");
 
-    var RadioNumero=document.getElementById("RadioNum").checked;
-        
-    var valor="";
-    if(RadioNumero===false)
-    {
-        valor="VARCHAR";
-    }
-    else
-    {
-        valor="NUMERIC";
+    var RadioNumero = document.getElementById("RadioNum").checked;
+
+    var valor = "";
+    if (RadioNumero === false) {
+        valor = "VARCHAR";
+    } else {
+        valor = "NUMERIC";
     }
 
 
@@ -175,7 +160,7 @@ function addRow2() {
 
         console.log(col1);
         console.log(col2);
-            
+
 
 
     }
@@ -190,29 +175,24 @@ function deleteRow2(obj) {
     table.deleteRow(index);
     console.log(index);
 
-    var col1Copia=[];
-    var col2Copia=[];
+    var col1Copia = [];
+    var col2Copia = [];
 
-    var contador=0;
-    for (var i = 0; i < col1.length; i+=1) 
-    {
-        if(i===index-1)
-        {
+    var contador = 0;
+    for (var i = 0; i < col1.length; i += 1) {
+        if (i === index - 1) {
             continue;
-        }
-        else
-        {
-            col1Copia[contador]=col1[i];
-            col2Copia[contador]=col2[i];
+        } else {
+            col1Copia[contador] = col1[i];
+            col2Copia[contador] = col2[i];
             contador++;
-            
+
         }
-        
-        
+
+
     }
 
-    col1=col1Copia;
-    col2=col2Copia;
+    col1 = col1Copia;
+    col2 = col2Copia;
 
 };
-

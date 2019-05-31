@@ -20,7 +20,7 @@ function createWindow() {
     // and load the index.html of the app.
     win.loadFile('./src/html/index.html');
 
-    win.setMenu(null);
+    // win.setMenu(null);
 
     // Open the DevTools.
     // win.webContents.openDevTools()
@@ -33,6 +33,8 @@ function createWindow() {
         win = null;
         app.quit();
     })
+
+    console.log(app.getPath("temp"));
 }
 
 function createProductsWindow() {
@@ -103,11 +105,11 @@ app.on('activate', () => {
     }
 });
 
-ipcMain.on('show-products', function () {
+ipcMain.on('show-products', function() {
     createProductsWindow();
 });
 
-ipcMain.on('show-products2', function () {
+ipcMain.on('show-products2', function() {
     createProductsWindow2();
 
 });

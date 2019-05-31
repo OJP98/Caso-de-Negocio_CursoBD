@@ -1,4 +1,3 @@
-
 var Pool = require('pg').Pool;
 var fs = require('fs');
 
@@ -7,10 +6,13 @@ var meses = ['Jan', 'Feb', 'Mar', 'Apr', 'May', "Jun", 'Jul', 'Aug', 'Sep', 'Oct
 
 var config = {
     user: 'postgres',
-    password: 'karate16',
-    database: 'proyecto2DB'
-    
+    database: 'proyecto2',
+    password: 'Juarez1998',
+    host: '127.0.0.1',
+    port: 5432,
+    max: 10,
 };
+
 
 var Pool = new Pool(config);
 
@@ -24,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var instances = M.Datepicker.init(elems, options);
 });
 
-function getRandom(min, max){
+function getRandom(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     var random = Math.random();
@@ -48,7 +50,7 @@ async function crearFacturas() {
     var fechaFinal = document.getElementById("final").value;
     var lineas = parseInt(document.getElementById("cantidad").value);
 
-    if(fechaInicial != '' && fechaFinal != '' && !isNaN(lineas)){
+    if (fechaInicial != '' && fechaFinal != '' && !isNaN(lineas)) {
         try {
             for(var i = 0; i < lineas; i++){
     
@@ -61,13 +63,13 @@ async function crearFacturas() {
                 var mes = String(fechaInicial).substring(0, 3);
                 var diaI = parseInt(String(fechaInicial).substring(4, 6));
                 var anoI = parseInt(String(fechaInicial).substring(8, 12));
-    
+
                 var mesI = meses.indexOf(mes) + 1;
-    
+
                 var mes = String(fechaFinal).substring(0, 3);
                 var diaF = parseInt(String(fechaFinal).substring(4, 6));
                 var anoF = parseInt(String(fechaFinal).substring(8, 12));
-    
+
                 var mesF = meses.indexOf(mes) + 1;
 
                 //-----------------------------------------------------------------
@@ -136,21 +138,17 @@ async function crearFacturas() {
                 console.log("Linea de factura: " + query);
                 await Pool.query(query);
             }
-        } catch(e){
+        } catch (e) {
             console.error("My error", e);
         }
         // console.log("LIsto");
-        M.toast({html: '¡Facturas creadas!', classes: 'rounded'});
+        M.toast({ html: '¡Facturas creadas!', classes: 'rounded' });
 
         var query = 'DELETE FROM facturas WHERE total IS NULL;';
         await Pool.query(query);
     }else{
         M.toast({html: '¡Hubo algun error!', classes: 'rounded'});
     }
-    
-    
+
+
 }
-
-
-
-

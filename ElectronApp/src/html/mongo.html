@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Datos del head -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Clientes favoritos</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="../js/Fns.js"></script>
+
+</head>
+
+<!-- Barra de navegación -->
+<nav class="fixed-nav-bar">
+    <div class="nav-wrapper">
+        <a id="nombreDeLaTienda" href="../html/index.html" class="brand-logo center"></a>
+        <ul class="left hide-on-med-and-down">
+            <li><a href="../html/index.html"><i class="material-icons">keyboard_backspace</i></a></li>
+        </ul>
+    </div>
+</nav>
+
+<body onload="getCollection()">
+
+    <h4 class="center">Clientes Favoritos</h4>
+
+    <br>
+
+    <a style="margin: 25px" class="waves-effect waves-light btn" onclick="pruebas()">
+        <i class="material-icons right">star_outline</i>Mejores 5
+    </a>
+
+    <br><br>
+
+    <script>
+        document.getElementById("nombreDeLaTienda").innerHTML = localStorage['NombreTienda'] || 'Nombre de la tienda';
+    </script>
+
+</body>
+
+</html>
