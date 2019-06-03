@@ -56,14 +56,15 @@ async function getProducts2() {
 
 }
 
-function tweer(mensaje)
-{
+function tweet() {
+
+    var mensaje = document.getElementById('idContent2').innerText;
     var OAuth = require('oauth');
 
-    var twitter_application_consumer_key = 'ZjL22XIcMSk8wd8Wt8Dut0LQH';  // API Key
-    var twitter_application_secret = 'Y5tfFUWp6lEVE8eKt7YvqP8h3pTPEALzKTeW9E2ZaDOH7WXRrh';  // API Secret
-    var twitter_user_access_token = '2539343170-RgS0DNYQEnMOSajBoHdaKqfEGeiG3BFweD1IQUt';  // Access Token
-    var twitter_user_secret = 'Nx093AFYUf9ZQhTSXehmNZ2UtPUYakOjB8w2e4n2vAJUg';  // Access Token Secret
+    var twitter_application_consumer_key = 'ZjL22XIcMSk8wd8Wt8Dut0LQH'; // API Key
+    var twitter_application_secret = 'Y5tfFUWp6lEVE8eKt7YvqP8h3pTPEALzKTeW9E2ZaDOH7WXRrh'; // API Secret
+    var twitter_user_access_token = '2539343170-RgS0DNYQEnMOSajBoHdaKqfEGeiG3BFweD1IQUt'; // Access Token
+    var twitter_user_secret = 'Nx093AFYUf9ZQhTSXehmNZ2UtPUYakOjB8w2e4n2vAJUg'; // Access Token Secret
 
     var oauth = new OAuth.OAuth(
         'https://api.twitter.com/oauth/request_token',
@@ -75,7 +76,7 @@ function tweer(mensaje)
         'HMAC-SHA1'
     );
 
-    var status = mensaje;  // This is the tweet (ie status)
+    var status = mensaje; // This is the tweet (ie status)
 
     var postBody = {
         'status': status
@@ -83,11 +84,11 @@ function tweer(mensaje)
 
     // console.log('Ready to Tweet article:\n\t', postBody.status);
     oauth.post('https://api.twitter.com/1.1/statuses/update.json',
-        twitter_user_access_token,  // oauth_token (user access token)
-        twitter_user_secret,  // oauth_secret (user secret)
-        postBody,  // post body
-        '',  // post content type ?
-        function (err, data, res) {
+        twitter_user_access_token, // oauth_token (user access token)
+        twitter_user_secret, // oauth_secret (user secret)
+        postBody, // post body
+        '', // post content type ?
+        function(err, data, res) {
             if (err) {
                 console.log(err);
             } else {
