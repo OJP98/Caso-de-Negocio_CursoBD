@@ -613,16 +613,25 @@ async function venderProducto(prodId, prodCant, idFactura) {
 
 
 
+
+
+
+
+var mejoresClientes = {};
+var mejoresClientesOrdenado = [];
+
 function getCollection() {
+
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("lab15DB");
-        dbo.collection("productos").find({}).toArray(function(err, result) {
+        var dbo = db.db("finalBD");
+        dbo.collection("FacturaYLineas").find({}).toArray(function(err, result) {
             if (err) throw err;
             mongoArray = result;
-            console.log("Get finished");
+            console.log("GET finished");
             db.close();
         });
+
     });
 }
 
@@ -630,18 +639,37 @@ function getCollection() {
 function pruebas() {
 
     var dict = {};
+    var clientesDict = {}
 
-    // Se crea el diccionario con llave: dpi, value: cant. de compras
+    // Se crea el diccionario con llave: idFactura, value: idCliente, total
     mongoArray.forEach(item => {
-        var dpi = item.dpi;
-        dict[dpi] == null ? dict[dpi] = 1 : dict[dpi] += 1;
+        var facturaid = item.facturaid;
+        if (dict[facturaid] == null) dict[facturaid] = new Array(item.clienteid, item.total);
     });
 
-    // Se ordena el diccionario, se mete a un array y se manda el dpi del mejor cliente
-    var sortedList = sort_object(dict),
-        dpiCliente1 = sortedList[0][0];
+    for (var key in dict) {
+        var clienteid = dict[key][0];
+        var totalFactura = dict[key][1];
 
-    getByDPI(dpiCliente1);
+        clientesDict[clienteid] == null ? clientesDict[clienteid] = totalFactura : clientesDict[clienteid] += totalFactura
+    }
+
+    // Se ordena el diccionario, se mete a un array y se manda el id del mejor cliente
+    var sortedList = sort_object(clientesDict);
+
+    for (let i = 0; i < 5; i++) {
+        var idCliente = sortedList[i][0];
+        var gastado = sortedList[i][1];
+        getByDPI(idCliente, gastado);
+    }
+
+    M.toast({
+        html: 'Clientes cargados con éxito!',
+        classes: 'rounded'
+    });
+
+    document.getElementById("topBtn").className = "waves-effect waves-light btn-large";
+    document.getElementById("tweetBtn").className = "waves-effect waves-light btn-large";
 
 }
 
@@ -655,42 +683,60 @@ function sort_object(obj) {
         return second[1] - first[1];
     });
 
-    // SI SE QUIERE RETORNAR COMO DICCIONARIO, DESCOMENTAR EL SIGUIENTE CÓDIGO
-
-    // sorted_obj = {}
-    // $.each(items, function(k, v) {
-    //     use_key = v[0]
-    //     use_value = v[1]
-    //     sorted_obj[use_key] = use_value
-    // })
-    // return (sorted_obj)
-
     return items;
+
 }
 
 
-function getByDPI(dpi) {
+function getByDPI(id, total) {
 
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("lab15DB");
+        var dbo = db.db("finalBD");
 
         // El "where" para el query
         var query = {
-            dpi: dpi
+            id: parseInt(id)
         };
 
-        // Los datos a elegir
-        var projection = {
-            _id: 0,
-            nombre: 1
-        }
-
         // Se obtiene la primera instancia
-        dbo.collection("productos").findOne(query, projection, function(err, result) {
+        dbo.collection("Cliente").findOne(query, function(err, result) {
             if (err) throw err;
-            console.log("El mejor cliente es:", result.nombre);
+            mejoresClientes[result.nombre] = total;
             db.close();
         });
     });
+}
+
+function peekMejores() {
+    mejoresClientesOrdenado = sort_object(mejoresClientes);
+
+    let string = "Los mejores clientes, ordenados por volumen de facturación son los siguientes:\n\n" +
+        "1. " + mejoresClientesOrdenado[0][0] + " - Q" + mejoresClientesOrdenado[0][1].toFixed(2) + "\n" +
+        "2. " + mejoresClientesOrdenado[1][0] + " - Q" + mejoresClientesOrdenado[1][1].toFixed(2) + "\n" +
+        "3. " + mejoresClientesOrdenado[2][0] + " - Q" + mejoresClientesOrdenado[2][1].toFixed(2) + "\n" +
+        "4. " + mejoresClientesOrdenado[3][0] + " - Q" + mejoresClientesOrdenado[3][1].toFixed(2) + "\n" +
+        "5. " + mejoresClientesOrdenado[4][0] + " - Q" + mejoresClientesOrdenado[4][1].toFixed(2) + "\n";
+
+    document.getElementById('idContent').innerText = string;
+}
+
+function prepareTweet() {
+    mejoresClientesOrdenado = sort_object(mejoresClientes);
+
+    let nombre1 = mejoresClientesOrdenado[0][0],
+        nombre2 = mejoresClientesOrdenado[1][0],
+        nombre3 = mejoresClientesOrdenado[2][0],
+        nombre4 = mejoresClientesOrdenado[3][0],
+        nombre5 = mejoresClientesOrdenado[4][0]
+
+    let string = `¡Las siguientes personas, clientes de ALMACENES GÜALMAR, tendrán una oferta especial en TODAS sus compras de esta semana!
+
+    ${nombre1} - 45%
+    ${nombre2} - 40%
+    ${nombre3} - 30%
+    ${nombre4} - 25%
+    ${nombre5} - 20%`
+
+    document.getElementById('idContent2').innerText = string;
 }

@@ -15,6 +15,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="../js/Fns.js"></script>
+    <script src="../js/Fns2.js"></script>
 
 </head>
 
@@ -31,17 +32,64 @@
 <body onload="getCollection()">
 
     <h4 class="center">Clientes Favoritos</h4>
-
     <br>
+    <hr>
 
-    <a style="margin: 25px" class="waves-effect waves-light btn" onclick="pruebas()">
-        <i class="material-icons right">star_outline</i>Mejores 5
-    </a>
+
+    <div id="popup1" class="overlay">
+        <div class="popup">
+            <h3>Top 5 clientes</h3>
+            <a class="close" href="#">&times;</a>
+            <div class="content" id="idContent" style="text-align: justify">
+
+            </div>
+        </div>
+    </div>
+
+
+    <div id="popup2" class="overlay">
+        <div class="popup">
+            <h3>Tweet a publicar</h3>
+            <a class="close" href="#">&times;</a>
+            <div class="content" id="idContent2" style="text-align: justify">
+
+            </div>
+
+            <div class="center">
+                <a id="publicarBtn" style="margin: 15px" class="cerrar waves-effect waves-light btn-small" onclick="tweet()">
+                    <i class="material-icons right">publish</i>Publicar
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="center">
+
+        <a style="width: 250px; margin: 25px" class="waves-effect waves-light btn-large" onclick="pruebas()">
+            <i class="material-icons right">hourglass_full</i>Cargar mejores
+        </a>
+        <br>
+
+        <a id="topBtn" style="width: 250px; margin: 25px" href="#popup1" class="waves-effect waves-light btn-large disabled" onclick="peekMejores()">
+            <i class="material-icons right">visibility</i>Ver top 5
+        </a>
+        <br>
+
+        <a id="tweetBtn" style="width: 250px; margin: 25px" href="#popup2" class="waves-effect waves-light btn-large disabled" onclick="prepareTweet()">
+            <i class=" material-icons right ">public</i>Hacer tweet
+        </a>
+
+    </div>
+
+
 
     <br><br>
 
     <script>
         document.getElementById("nombreDeLaTienda").innerHTML = localStorage['NombreTienda'] || 'Nombre de la tienda';
+
+        // onclick=" tweer( 'JP 133216') "
     </script>
 
 </body>
