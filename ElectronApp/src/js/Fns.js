@@ -34,6 +34,12 @@ var config = {
     max: 10,
 };
 
+var config = {
+    user: 'postgres',
+    database: 'proyecto2DB',
+    password: 'Javiercarpio1',
+    host: '127.0.0.1'
+};
 // var config = {
 //     user: 'postgres',
 //     password: 'karate16',

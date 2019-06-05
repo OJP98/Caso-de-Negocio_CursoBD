@@ -8,6 +8,12 @@ var config = {
     port: 5432,
     max: 10,
 };
+var config = {
+    user: 'postgres',
+    database: 'proyecto2DB',
+    password: 'Javiercarpio1',
+    host: '127.0.0.1'
+};
 var Pool = new Pool(config);
 
 
