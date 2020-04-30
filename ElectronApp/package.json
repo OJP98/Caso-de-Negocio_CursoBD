@@ -12,7 +12,7 @@
     "electron": "^5.0.1"
   },
   "dependencies": {
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "mongodb": "^3.2.6",
     "oauth": "^0.9.15",
     "pg": "^7.10.0",
